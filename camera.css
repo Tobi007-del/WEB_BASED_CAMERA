@@ -6,8 +6,6 @@ body {
 }
 
 video {
-    all: unset;
-    transform: scaleX(-1);
     margin-top: 2px;
     border: 1px solid black;
     width: 100%;
