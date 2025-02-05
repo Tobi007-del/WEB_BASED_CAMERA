@@ -1,54 +1,241 @@
-body {
-    font:
-        14px "Open Sans",
-        "Arial",
-        sans-serif;
+:root {
+    --text-color: white;
+    --theme-color: #111;
+    --theme-accent-color-1: #222;
+    --theme-accent-color-2: #333;
+    --theme-accent-color-3: #444;
+    --border: 1.25px solid var(--theme-accent-color-3);
+    --wrapper-height: 46.5px;
 }
 
-video {
-    all: unset;
-    margin-top: 2px;
-    border: 1px solid black;
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+svg {
+    width: 100%;
+    height: 100%;
+}
+
+button {
+    border: none;
+    color: inherit;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+body {
+    animation: change-color 2s infinite linear forwards;
+    background: var(--theme-color);
+    font-family: 'Trebuchet MS',
+        'Lucida Sans Unicode',
+        'Lucida Grande',
+        'Lucida Sans',
+        Arial,
+        sans-serif, sans-serif;
+    color: var(--text-color);
+}
+
+.content-container {
+    position: absolute;
+    margin: auto;
+    inset: 0;
+    width: clamp(300px, 80vw, 500px);
+    height: fit-content;
+    background: var(--theme-accent-color-1);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.go-back-button,
+.content-hero-section,
+.content-hero-header,
+.content-recorder-section,
+.content-recorder-controls-wrapper,
+.content-recorder-video-wrapper,
+.content-recorder-timer-wrapper,
+.controls-button,
+.content-log-section,
+.content-footer-wrapper,
+.settings-button {
+    display: none;
+}
+
+.content-container[data-active-section="hero"] :is(.content-hero-header, .content-hero-section),
+:is(.content-container[data-active-section="recorder"], .content-container[data-active-section="log"]) :is(.go-back-button, .content-footer-wrapper),
+.content-container[data-active-section="recorder"] .content-recorder-section,
+.content-container[data-active-section="log"] .content-log-section {
+    display: flex;
+}
+
+.content-container:has(.content-recorder-section:not([data-action="record"], [data-action="finished"])) .settings-button {
+    display: flex;
+}
+
+.content-container:not([data-active-section="hero"]) :is(.content-header-wrapper, .content-footer-wrapper) {
+    background: black;
+}
+
+.content-header-wrapper {
+    flex: 0 0 var(--wrapper-height);
+    border-bottom: var(--border);
+    display: flex;
+    align-items: center;
+    font-weight: bolder;
+    padding-inline: 20px;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+.go-back-button {
+    flex: 0 0 27px;
+    height: 27px;
+    padding: 7px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 7px;
+    border: var(--border);
+}
+
+.content-hero-header {
+    flex: 1;
+    text-align: center;
+    justify-content: center;
+}
+
+.content-footer-wrapper {
+    flex: 0 0 var(--wrapper-height);
+    align-items: center;
+    padding-inline: 10px;
+}
+
+.settings-button {
+    width: 25px;
+    height: 25px;
+}
+
+.content-body-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-hero-section {
+    align-items: center;
+    justify-content: center;
+    height: 250px;
+    width: 100%;
+    padding: 20px;
+}
+
+.content-hero-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    height: 100%;
+    width: 100%;
+    background-color: var(--theme-accent-color-3);
+}
+
+.content-hero-button:hover {
+    border: 2px solid lightblue;
+    box-shadow: 0px 0px 0px 4px rgba(0, 0, 255, 0.5);
+}
+
+.content-hero-image {
+    width: 75px;
+    aspect-ratio: 1 / 1;
+}
+
+.content-hero-text {
+    font-size: 12.5px;
+}
+
+.content-recorder-section {
     width: 100%;
 }
 
-.button {
-    cursor: pointer;
-    display: block;
-    width: 160px;
-    border: 1px solid black;
-    font-size: 16px;
-    text-align: center;
-    padding-top: 2px;
-    padding-bottom: 4px;
-    color: white;
-    background-color: darkgreen;
-    text-decoration: none;
+.content-recorder-pre-stream-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-block: 100px;
+    font-size: 18px;
+    color: rgb(24, 24, 255);
 }
 
-h2 {
-    margin-bottom: 4px;
+.content-recorder-section[data-ready="true"] .content-recorder-pre-stream-wrapper {
+    display: none;
 }
 
-.left {
-    margin-right: 10px;
-    float: left;
-    width: 160px;
-    padding: 0px;
+.content-recorder-video-wrapper {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
-.right {
-    margin-left: 10px;
-    float: left;
-    width: 160px;
-    padding: 0px;
+.recorder-video {
+    width: 100%;
+    min-height: 320px;
+    max-height: 70vh;
+    background: black;
 }
 
-.bottom {
-    clear: both;
-    padding-top: 10px;
+.content-recorder-timer-wrapper {
+    position: absolute; 
+    bottom: 0;
+    right: 0;
+    padding: 10px;
+    font-size: 25px;
 }
 
-.log {
-    background: azure;
+.content-recorder-section[data-ready="true"][data-action="record"] .content-recorder-timer-wrapper,
+.content-recorder-section[data-ready="true"] :is(.content-recorder-controls-wrapper, .content-recorder-video-wrapper) {
+    display: flex;
+}
+
+.content-recorder-controls-wrapper {
+    position: absolute;
+    height: var(--wrapper-height);
+    inset-inline: 0;
+    bottom: calc(var(--wrapper-height)/-2);
+    justify-content: center;
+    gap: 30px;
+}
+
+.content-recorder-section[data-action="preview"] :is(.capture-photo-button, .capture-video-button),
+.content-recorder-section[data-action="record"] .stop-recording-button,
+.content-recorder-section[data-action="finished"] :is(.reset-button, .save-button) {
+    display: flex;
+}
+
+.controls-button {
+    width: 45px;
+    height: 45px;
+    background-color: red;
+    padding: 16.5px;
+    border-radius: 50%;
+}
+
+.save-button {
+    background-color: rgb(110, 248, 110)
+}
+
+.content-log-section {
+    padding: 20px;
+    font-size: 18px;
+    color: rgba(255, 0, 0, 0.85);
 }
