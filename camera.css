@@ -174,7 +174,7 @@ body {
     align-items: center;
     padding-block: 100px;
     font-size: 18px;
-    color: rgb(24, 24, 255);
+    color: rgb(24, 132, 255);
 }
 
 .content-recorder-section[data-ready="true"] .content-recorder-pre-stream-wrapper {
@@ -192,6 +192,10 @@ body {
     min-height: 320px;
     max-height: 70vh;
     background: black;
+}
+
+.content-recorder-section[data-ready="true"][data-action="preview"] .recorder-video {
+    transform: scaleX(-1);
 }
 
 .content-recorder-timer-wrapper {
