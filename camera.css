@@ -48,7 +48,8 @@ body {
     position: absolute;
     margin: auto;
     inset: 0;
-    width: clamp(300px, 80vw, 500px);
+    width: clamp(400px, 80vw, 500px);
+    max-width: 95vw;
     height: fit-content;
     background: var(--theme-accent-color-1);
     border-radius: 10px;
