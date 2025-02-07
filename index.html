@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CAMERA_PROTOTYPE</title>
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="assets/icons/camera.png">
     <link rel="stylesheet" href="camera.css">
 </head>
 <body>
@@ -29,6 +30,32 @@
                 </div>
                 <div class="content-recorder-video-wrapper">
                     <video class="recorder-video" playsinline="true" -webkit-playsinline="true">"Your browser doesn't support video playback :)"</video>
+                    <div class="stall-timer">
+                        <div class="timer-section-wrapper timer-top-wrapper">
+                            <div class="timer-section timer-top">
+                                <p></p>
+                                <video autoplay muted class="timer-top"></video>
+                            </div>
+                        </div>
+                        <div class="timer-section-wrapper timer-bottom-wrapper">
+                            <div class="timer-section timer-bottom">
+                                <p></p>
+                                <video autoplay muted class="timer-bottom"></video>
+                            </div>
+                        </div>
+                        <div class="timer-section-wrapper top-flip-wrapper">
+                            <div class="timer-section top-flip">
+                                <p></p>
+                                <video autoplay muted class="top-flip"></video>
+                            </div>
+                        </div>
+                        <div class="timer-section-wrapper bottom-flip-wrapper">
+                            <div class="timer-section bottom-flip">
+                                <p></p>
+                                <video autoplay muted class="bottom-flip"></video>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="content-recorder-timer-wrapper">
                     <p class="recorder-timer">00:00</p>

@@ -106,9 +106,15 @@ const DOM = {
     footerWrapper : document.querySelector(".content-footer-wrapper"),
     heroSection : document.querySelector(".content-hero-section"),
     recorderSection : document.querySelector(".content-recorder-section"),
+    recorderVideoWrapper : document.querySelector(".content-recorder-video-wrapper"),
     logSection : document.querySelector(".content-log-section"),
     logMessage : document.querySelector(".content-log-message"),
     video : document.querySelector(".recorder-video"),
+    timerVideos : document.querySelectorAll(".stall-timer video"),
+    timerTopWrapper : document.querySelector(".timer-top-wrapper"),
+    timerBottomWrapper : document.querySelector(".timer-bottom-wrapper"),
+    topFlipWrapper : document.querySelector(".top-flip-wrapper"),
+    bottomFlipWrapper : document.querySelector(".bottom-flip-wrapper"),
     timer : document.querySelector(".recorder-timer"),
     goBackBtn : document.querySelector(".go-back-button"),
     settingsBtn : document.querySelector(".settings-button"),
@@ -121,7 +127,10 @@ const DOM = {
 },
 //CONTENT ARRAYS
 sections = ["hero", "recorder"],
-recorderActions = ["preview", "record", "finished"]
+recorderActions = ["preview", "record", "finished"],
+//CONSTANTS
+stallTimerDelayInS = 3,
+stallTimerDelaynMs = stallTimerDelayInS * 1000
 
 let sectionsIndex = 0
 
@@ -159,21 +168,57 @@ function initRecording() {
         DOM.video.srcObject = stream
         DOM.video.captureStream = DOM.video.captureStream || DOM.video.mozCaptureStream
         DOM.video.muted = true
-        DOM.video.play()
         DOM.video.addEventListener("playing", () => DOM.recorderSection.dataset.ready = true, {once: true})
+        DOM.video.play()
+        DOM.timerVideos.forEach(video => video.srcObject = stream)
     })
 }
 
-async function stall(delay) {
-    
+//logic for a somewhat experimental countdown timer cause "why not?"
+
+async function stall(delayInMs) {
+return new Promise(resolve => {
+    DOM.recorderSection.classList.add("stall")
+    DOM.timerTopWrapper.querySelector("p").textContent = Math.round(delayInMs / 1000)
+    DOM.timerBottomWrapper.querySelector("p").textContent = Math.round(delayInMs / 1000)
+
+    let activeTime = 0
+    let stallInterval = setInterval(() => {
+        activeTime += 1000
+
+        if (activeTime < delayInMs) {
+            const startNumber = parseInt(DOM.timerTopWrapper.querySelector("p").textContent)
+            const newNumber = Math.round(delayInMs / 1000) - Math.round(activeTime / 1000)
+
+            DOM.timerTopWrapper.querySelector("p").textContent = startNumber
+            DOM.timerBottomWrapper.querySelector("p").textContent = startNumber
+            DOM.topFlipWrapper.querySelector("p").textContent = startNumber
+            DOM.bottomFlipWrapper.querySelector("p").textContent = newNumber
+
+            DOM.topFlipWrapper.onanimationstart = () => DOM.timerTopWrapper.querySelector("p").textContent = newNumber
+            DOM.topFlipWrapper.onanimationend = () => DOM.topFlipWrapper.classList.remove("flip")
+            DOM.bottomFlipWrapper.onanimationend = () => {
+                DOM.timerBottomWrapper.querySelector("p").textContent = newNumber
+                DOM.bottomFlipWrapper.classList.remove("flip")
+            }
+
+            DOM.bottomFlipWrapper.classList.add("flip")
+            DOM.topFlipWrapper.classList.add("flip")
+        } else {
+            DOM.recorderSection.classList.remove("stall")
+            clearInterval(stallInterval)
+            resolve(delayInMs / 1000 + " seconds elapsed, stalling successfully... You can now ride on!")
+        }
+    }, 1000)
+})
 }
 
 function capturePhoto() {
-
+    stall(stallTimerDelaynMs).then(res => console.log(res))
 }
 
 function captureVideo() {
-
+    stall(stallTimerDelaynMs).then(res => console.log(res))
 }
 
 DOM.goBackBtn.addEventListener("click", resetSections)

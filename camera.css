@@ -63,6 +63,7 @@ body {
 .content-recorder-section,
 .content-recorder-controls-wrapper,
 .content-recorder-video-wrapper,
+.stall-timer,
 .content-recorder-timer-wrapper,
 .controls-button,
 .content-log-section,
@@ -184,19 +185,111 @@ body {
 
 .content-recorder-video-wrapper {
     width: 100%;
+    height: fit-content;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
-.recorder-video {
+.recorder-video,
+.timer-top,
+.timer-bottom,
+.top-flip,
+.bottom-flip {
     width: 100%;
     min-height: 320px;
     max-height: 70vh;
     background: black;
 }
 
-.content-recorder-section[data-ready="true"][data-action="preview"] .recorder-video {
+.content-recorder-section[data-ready="true"][data-action="preview"] video {
     transform: scaleX(-1);
+}
+
+.content-recorder-section.stall .stall-timer {
+    display: flex;
+}
+
+.stall-timer {
+    flex-direction: column;
+    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 1.5px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.timer-section-wrapper {
+    position: relative;
+    height: 50%;
+    overflow: hidden;
+}
+
+.timer-top-wrapper,
+.top-flip-wrapper {
+    border-bottom: .1px solid rgba(0, 0, 0, 0.75);
+}
+
+.timer-bottom-wrapper,
+.bottom-flip-wrapper {
+    display: flex;
+    align-items: flex-end;
+}
+
+.top-flip-wrapper,
+.bottom-flip-wrapper {
+    position: absolute;
+    opacity: 0;
+}
+
+.top-flip-wrapper {
+    transform-origin: bottom;
+}
+
+.top-flip-wrapper.flip {
+    opacity: 1;
+    animation: flip-top 250ms ease-in;
+}
+
+@keyframes flip-top {
+    100% {
+        transform: rotateX(90deg);
+    }
+}
+
+.bottom-flip-wrapper {
+    bottom: 0;
+    transform: rotateX(90deg);
+    transform-origin: top;
+}
+
+.bottom-flip-wrapper.flip {
+    opacity: 1;
+    animation: flip-bottom 250ms ease-in 250ms;
+}
+
+@keyframes flip-bottom {
+    100% {
+        transform: rotateX(0deg);
+    }
+}
+
+.timer-section {
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-section p {
+    position: absolute;
+    font-size: 80px;
+    z-index: 1;
+}
+
+.top-flip-wrapper,
+.bottom-flip-wrapper {
+    z-index: 1;
 }
 
 .content-recorder-timer-wrapper {
