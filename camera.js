@@ -178,9 +178,9 @@ function initRecording() {
 
 async function stall(delayInMs) {
 return new Promise(resolve => {
-    DOM.recorderSection.classList.add("stall")
     DOM.timerTopWrapper.querySelector("p").textContent = Math.round(delayInMs / 1000)
     DOM.timerBottomWrapper.querySelector("p").textContent = Math.round(delayInMs / 1000)
+    DOM.recorderSection.classList.add("stall")
 
     let activeTime = 0
     let stallInterval = setInterval(() => {

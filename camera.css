@@ -42,6 +42,7 @@ body {
         Arial,
         sans-serif, sans-serif;
     color: var(--text-color);
+    overflow: hidden;
 }
 
 .content-container {
@@ -217,12 +218,14 @@ body {
     width: 100%;
     height: 100%;
     position: absolute;
+    perspective: 500px;
 }
 
 .timer-section-wrapper {
     position: relative;
     height: 50%;
     overflow: hidden;
+    transform-style: preserve-3d;
 }
 
 .timer-top-wrapper,
