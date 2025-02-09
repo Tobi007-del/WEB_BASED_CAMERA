@@ -218,7 +218,7 @@ body {
     width: 100%;
     height: 100%;
     position: absolute;
-    perspective: 500px;
+    perspective: 2500px;
 }
 
 .timer-section-wrapper {
