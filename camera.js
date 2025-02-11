@@ -164,7 +164,7 @@ function removeAudioConstraint() {
 
     DOM.audioPickerBtn.textContent = "Without audio"
     recorderConstraints.audio = false
-    
+
     initPreview()
 }
 
@@ -262,11 +262,11 @@ try {
     const audioTrack = stream.getAudioTracks()[0] 
     if(videoTrack) {
         const videoSettings = videoTrack.getSettings()
-        DOM.videoPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === videoSettings.deviceId)?.label
+        DOM.videoPickerBtn.textContent = userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.deviceId === videoSettings.deviceId)?.label
     } 
     if(audioTrack) {
         const audioSettings = audioTrack.getSettings()
-        DOM.audioPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === audioSettings.deviceId)?.label
+        DOM.audioPickerBtn.textContent = userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.deviceId === audioSettings.deviceId)?.label
     } else {
         DOM.audioPickerBtn.textContent = "Without audio"
     }
