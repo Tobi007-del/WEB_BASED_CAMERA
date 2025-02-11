@@ -144,21 +144,27 @@ stallTimerDelayInS = 3,
 userMediaDevices = [],
 recorderConstraints = {audio:true, video:true}
 
-function updateConstraints({target}) {
-    const {kind, label, deviceId} = target.dataset
+function updateConstraints({currentTarget}) {
+    currentTarget.parentElement.classList.remove("active")
+
+    const {kind, label, deviceId} = currentTarget.dataset
     if (kind === "videoinput") {
         DOM.videoPickerBtn.textContent = label
-        recorderConstraints.video = {deviceId: deviceId ? {exact: deviceId} : undefined}
+        recorderConstraints.video = {deviceId: {exact: deviceId}}
     } else if (kind === "audioinput") {
         DOM.audioPickerBtn.textContent = label
-        recorderConstraints.audio = {deviceId: deviceId ? {exact: deviceId} : undefined}
+        recorderConstraints.audio = {deviceId: {exact: deviceId}}
     }
+    
     initPreview()
 }
 
 function removeAudioConstraint() {
-    DOM.audioPickerBtn.textContent = "Without Audio"
+    DOM.audioSettingsDropdown.classList.remove("active")
+
+    DOM.audioPickerBtn.textContent = "Without audio"
     recorderConstraints.audio = false
+    
     initPreview()
 }
 
@@ -178,7 +184,7 @@ function noAudioChoiceBtn() {
     const button = document.createElement('button')
     button.type = "button"
     button.className = "settings-choice"
-    button.textContent = button.title = "Without Audio"
+    button.textContent = button.title = "Without audio"
     button.addEventListener("click", removeAudioConstraint)
 
     return button
@@ -262,7 +268,7 @@ try {
         const audioSettings = audioTrack.getSettings()
         DOM.audioPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === audioSettings.deviceId)?.label
     } else {
-        DOM.audioPickerBtn.textContent = "Without Audio"
+        DOM.audioPickerBtn.textContent = "Without audio"
     }
         
     DOM.video.srcObject = stream
