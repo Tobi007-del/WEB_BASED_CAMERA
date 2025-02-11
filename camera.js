@@ -195,11 +195,13 @@ try {
     DOM.videoSettingsDropdown.innerHTML = ''
     DOM.audioSettingsDropdown.innerHTML = ''
     devices.forEach(device => {
+    if (!userMediaDevices.some(d => d.label.includes(device.label) || device.label.includes(d.label))) {
         userMediaDevices.push(device)
         if (device.kind === "videoinput")
             DOM.videoSettingsDropdown.appendChild(settingsChoiceBtn(device))
         else if (device.kind === "audioinput") 
             DOM.audioSettingsDropdown.appendChild(settingsChoiceBtn(device))
+    }
     })
     DOM.audioSettingsDropdown.appendChild(noAudioChoiceBtn())
 } catch(error) {

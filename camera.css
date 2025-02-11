@@ -197,15 +197,11 @@ body {
     background: black;
 }
 
-.recorder-video,
-.timer-top,
-.timer-bottom,
-.top-flip,
-.bottom-flip {
+.content-recorder-section video {
     aspect-ratio: auto;
     max-width: 100%;
     min-height: 320px;
-    max-height: 70vh;
+    max-height: 90vh;
     background: inherit;
 }
 
@@ -348,7 +344,7 @@ body {
 }
 
 .content-log-section {
-    padding: 50px 20px;
+    padding: 70px 20px;
     font-size: 18px;
     color: rgba(255, 0, 0, 0.85);
 }
