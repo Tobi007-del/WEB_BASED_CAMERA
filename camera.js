@@ -157,6 +157,7 @@ function updateConstraints({target}) {
 }
 
 function removeAudioConstraint() {
+    DOM.audioPickerBtn.textContent = "Without Audio"
     recorderConstraints.audio = false
     initPreview()
 }
@@ -274,7 +275,7 @@ try {
 }
 
 function editStallDelay({currentTarget}) {
-    stallTimerDelayInS = parseInt(currentTarget.dataset.stallTime)
+    stallTimerDelayInS = parseInt(currentTarget.dataset.stallTime ?? 0)
     DOM.stallTimerBtns.forEach(btn => btn.classList.remove("active"))
     currentTarget.classList.add("active")
 }
@@ -282,7 +283,7 @@ function editStallDelay({currentTarget}) {
 //logic for a somewhat experimental countdown timer cause "why not?"
 async function stall(delayInMs) {
 return new Promise(resolve => {
-if (delayInMs > 0) {
+if (delayInMs > 1000) {
     DOM.timerTopWrapper.querySelector("p").textContent = Math.round(delayInMs / 1000)
     DOM.timerBottomWrapper.querySelector("p").textContent = Math.round(delayInMs / 1000)
     DOM.recorderSection.classList.add("stall")
@@ -312,7 +313,7 @@ if (delayInMs > 0) {
         } else {
             DOM.recorderSection.classList.remove("stall")
             clearInterval(stallInterval)
-            resolve(delayInMs / 1000 + " seconds elapsed, stalling successfully... You can now ride on!")
+            resolve(delayInMs / 1000 + " seconds elapsed, stalled user successfully... You can now ride on!")
         }
     }, 1000)
 }
@@ -331,10 +332,7 @@ function captureVideo() {
 window.addEventListener("load", getMediaDevices)
 
 navigator.mediaDevices.addEventListener("devicechange", () => getMediaDevices().then(() => {
-    const videoSettingsLabel = DOM.videoPickerBtn.textContent
-    const audioSettingsLabel = DOM.audioPickerBtn.textContent
-
-    if (!userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.label === videoSettingsLabel) || !userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.label === audioSettingsLabel)) initPreview()
+    if (!userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.label === DOM.videoPickerBtn.textContent) || !userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.label === DOM.audioPickerBtn.textContent)) initPreview()
 }))
 
 DOM.goBackBtn.addEventListener("click", previousSection)

@@ -194,6 +194,7 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
+    background: black;
 }
 
 .recorder-video,
@@ -201,10 +202,11 @@ body {
 .timer-bottom,
 .top-flip,
 .bottom-flip {
-    width: 100%;
+    aspect-ratio: auto;
+    max-width: 100%;
     min-height: 320px;
     max-height: 70vh;
-    background: black;
+    background: inherit;
 }
 
 .content-recorder-section[data-action="preview"] video {
@@ -223,13 +225,14 @@ body {
     height: 100%;
     position: absolute;
     perspective: 2500px;
+    background: inherit;
 }
 
 .timer-section-wrapper {
     position: relative;
     height: 50%;
     overflow: hidden;
-    transform-style: preserve-3d;
+    background: inherit;
 }
 
 .timer-top-wrapper,
@@ -247,6 +250,8 @@ body {
 .bottom-flip-wrapper {
     position: absolute;
     opacity: 0;
+    transform-style: preserve-3d;
+    will-change: transform;
 }
 
 .top-flip-wrapper {
@@ -286,6 +291,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: inherit;
 }
 
 .timer-section p {
@@ -342,7 +348,7 @@ body {
 }
 
 .content-log-section {
-    padding: 20px;
+    padding: 50px 20px;
     font-size: 18px;
     color: rgba(255, 0, 0, 0.85);
 }
@@ -429,6 +435,7 @@ body {
 
 .settings-choice {
     width: 100%;
+    min-width: 130px;
     text-align: left;
     height: 22px;
     line-height: 22px;
