@@ -97,7 +97,6 @@
 
 
 
-
 //DOM Elements
 const DOM = {
     container : document.querySelector(".content-container"),
@@ -123,16 +122,73 @@ const DOM = {
     captureVideoBtn : document.querySelector(".capture-video-button"),
     stopRecordingBtn : document.querySelector(".stop-recording-button"),
     resetBtn : document.querySelector(".reset-button"),
-    saveBtn : document.querySelector(".save-button")
+    saveBtn : document.querySelector(".save-button"),
+    settingsWrapper: document.querySelector(".settings-wrapper"),
+    closeSettingsBtn: document.querySelector(".close-settings-button"),
+    stallTimerBtns: document.querySelectorAll(".stall-timer-button"),
+    videoPickerWrapper: document.querySelector(".camera-section .section-picker-wrapper"),
+    videoPickerBtn: document.querySelector(".video-picker-button"),
+    audioPickerWrapper: document.querySelector(".audio-section .section-picker-wrapper"),
+    audioPickerBtn: document.querySelector(".audio-picker-button"),
+    videoSettingsDropdown: document.querySelector(".camera-section .settings-choices-dropdown"),
+    audioSettingsDropdown: document.querySelector(".audio-section .settings-choices-dropdown"),
 },
 //CONTENT ARRAYS
 sections = ["hero", "recorder"],
 recorderActions = ["preview", "record", "finished"],
 //CONSTANTS
+stallTimerDelaynMs = () => stallTimerDelayInS * 1000
+//NON-CONSTANTS
+let sectionsIndex = 0,
 stallTimerDelayInS = 3,
-stallTimerDelaynMs = stallTimerDelayInS * 1000
+userMediaDevices = [],
+recorderConstraints = {audio:true, video:true}
 
-let sectionsIndex = 0
+function updateConstraints({target}) {
+    const {kind, label, deviceId} = target.dataset
+    if (kind === "videoinput") {
+        DOM.videoPickerBtn.textContent = label
+        recorderConstraints.video = {deviceId: deviceId ? {exact: deviceId} : undefined}
+    } else if (kind === "audioinput") {
+        DOM.audioPickerBtn.textContent = label
+        recorderConstraints.audio = {deviceId: deviceId ? {exact: deviceId} : undefined}
+    }
+    initPreview()
+}
+
+function settingsChoiceButton({kind, label, deviceId}) {
+    const button = document.createElement('button')
+    button.type = "button"
+    button.className = "settings-choice"
+    button.textContent = button.title = button.dataset.label = label
+    button.dataset.kind = kind
+    button.dataset.deviceId = deviceId 
+    button.addEventListener("click", updateConstraints)
+    
+    return button
+}
+
+async function getMediaDevices() {
+try {
+    recorderConstraints = {audio:true, video:true}
+    userMediaDevices = []
+
+    const devices = await navigator.mediaDevices
+    .enumerateDevices()
+
+    DOM.videoSettingsDropdown.innerHTML = ''
+    DOM.audioSettingsDropdown.innerHTML = ''
+    devices.forEach(device => {
+        userMediaDevices.push(device)
+        if (device.kind === "videoinput")
+            DOM.videoSettingsDropdown.appendChild(settingsChoiceButton(device))
+        else if (device.kind === "audioinput") 
+            DOM.audioSettingsDropdown.appendChild(settingsChoiceButton(device))
+    })
+} catch(error) {
+    logError(error)
+}
+}
 
 function updateSections() {
     DOM.container.dataset.activeSection = sections[sectionsIndex]
@@ -144,9 +200,21 @@ function previousSection() {
     updateSections()
 }
 
+function goToSection(section) {
+    DOM.container.dataset.activeSection = section
+    stopRecording()
+    if (section !== "log") sectionsIndex = sections.indexOf(section)
+}
+
 function resetSections() {
     sectionsIndex = 0
     updateSections()
+}
+
+function logError(error) {
+    console.log("Error occured: " + error)
+    goToSection("log")
+    DOM.logMessage.textContent = error.message
 }
 
 function stopRecording() {
@@ -156,28 +224,43 @@ function stopRecording() {
     }
 }
 
-function initRecording() {
+async function initPreview() {
+try {
+    DOM.recorderSection.dataset.ready = false
     sectionsIndex = 1
     updateSections()
-    navigator.mediaDevices
-    .getUserMedia({
-        video: true,
-        audio: true
-    })
-    .then(stream => {
-        DOM.video.srcObject = stream
-        DOM.video.captureStream = DOM.video.captureStream || DOM.video.mozCaptureStream
-        DOM.video.muted = true
-        DOM.video.addEventListener("playing", () => DOM.recorderSection.dataset.ready = true, {once: true})
-        DOM.video.play()
-        DOM.timerVideos.forEach(video => video.srcObject = stream)
-    })
+    
+    const stream = await navigator.mediaDevices
+    .getUserMedia(recorderConstraints)
+
+    const videoTrack = stream.getVideoTracks()[0]
+    const audioTrack = stream.getAudioTracks()[0] 
+    const videoSettings = videoTrack.getSettings()
+    const audioSettings = audioTrack.getSettings()
+    DOM.videoPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === videoSettings.deviceId).label
+    DOM.audioPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === audioSettings.deviceId).label
+        
+    DOM.video.srcObject = stream
+    DOM.video.captureStream = DOM.video.captureStream || DOM.video.mozCaptureStream
+    DOM.video.muted = true
+    DOM.video.addEventListener("playing", () => DOM.recorderSection.dataset.ready = true, {once: true})
+    DOM.timerVideos.forEach(video => video.srcObject = stream)
+    DOM.video.play()
+} catch(error) {
+    logError(error)
+}
+}
+
+function editStallDelay({currentTarget}) {
+    stallTimerDelayInS = parseInt(currentTarget.dataset.stallTime)
+    DOM.stallTimerBtns.forEach(btn => btn.classList.remove("active"))
+    currentTarget.classList.add("active")
 }
 
 //logic for a somewhat experimental countdown timer cause "why not?"
-
 async function stall(delayInMs) {
 return new Promise(resolve => {
+if (delayInMs > 0) {
     DOM.timerTopWrapper.querySelector("p").textContent = Math.round(delayInMs / 1000)
     DOM.timerBottomWrapper.querySelector("p").textContent = Math.round(delayInMs / 1000)
     DOM.recorderSection.classList.add("stall")
@@ -210,21 +293,42 @@ return new Promise(resolve => {
             resolve(delayInMs / 1000 + " seconds elapsed, stalling successfully... You can now ride on!")
         }
     }, 1000)
+}
 })
 }
 
 function capturePhoto() {
-    stall(stallTimerDelaynMs).then(res => console.log(res))
+    stall(stallTimerDelaynMs()).then(res => console.log(res))
 }
 
 function captureVideo() {
-    stall(stallTimerDelaynMs).then(res => console.log(res))
+    stall(stallTimerDelaynMs()).then(res => console.log(res))
 }
 
-DOM.goBackBtn.addEventListener("click", resetSections)
+//EVENT LISTENERS
+window.addEventListener("load", getMediaDevices)
 
-DOM.heroBtn.addEventListener("click", initRecording)
+navigator.mediaDevices.addEventListener("devicechange", () => getMediaDevices().then(() => {
+    const videoSettingsLabel = DOM.videoPickerBtn.textContent
+    const audioSettingsLabel = DOM.audioPickerBtn.textContent
+
+    if (!userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.label === videoSettingsLabel) || !userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.label === audioSettingsLabel)) initPreview()
+}))
+
+DOM.goBackBtn.addEventListener("click", previousSection)
+
+DOM.heroBtn.addEventListener("click", initPreview)
 
 DOM.caputrePhotoBtn.addEventListener("click", capturePhoto)
 
 DOM.captureVideoBtn.addEventListener("click", captureVideo)
+
+DOM.stallTimerBtns.forEach(btn => btn.addEventListener("click", editStallDelay))
+
+DOM.settingsBtn.addEventListener("click", () => DOM.settingsWrapper.classList.toggle("active"))
+
+DOM.closeSettingsBtn.addEventListener("click", () => DOM.settingsWrapper.classList.remove("active"))
+
+DOM.videoPickerBtn.addEventListener("click", () => DOM.videoSettingsDropdown.classList.toggle("active"))
+
+DOM.audioPickerBtn.addEventListener("click", () => DOM.audioSettingsDropdown.classList.toggle("active"))

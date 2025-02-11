@@ -69,7 +69,9 @@ body {
 .controls-button,
 .content-log-section,
 .content-footer-wrapper,
-.settings-button {
+.settings-button,
+.settings-wrapper,
+.settings-choices-dropdown {
     display: none;
 }
 
@@ -124,6 +126,7 @@ body {
 .settings-button {
     width: 25px;
     height: 25px;
+    z-index: 1;
 }
 
 .content-body-wrapper {
@@ -175,6 +178,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     padding-block: 100px;
     font-size: 18px;
     color: rgb(24, 132, 255);
@@ -203,7 +207,7 @@ body {
     background: black;
 }
 
-.content-recorder-section[data-ready="true"][data-action="preview"] video {
+.content-recorder-section[data-action="preview"] video {
     transform: scaleX(-1);
 }
 
@@ -310,11 +314,13 @@ body {
 
 .content-recorder-controls-wrapper {
     position: absolute;
-    height: var(--wrapper-height);
+    height: fit-content;
     inset-inline: 0;
     bottom: calc(var(--wrapper-height)/-2);
     justify-content: center;
-    gap: 30px;
+    padding-inline: 20px;
+    flex-wrap: wrap;
+    column-gap: 30px;
 }
 
 .content-recorder-section[data-action="preview"] :is(.capture-photo-button, .capture-video-button),
@@ -339,4 +345,130 @@ body {
     padding: 20px;
     font-size: 18px;
     color: rgba(255, 0, 0, 0.85);
+}
+
+.settings-wrapper {
+    flex-direction: column;
+    position: absolute;
+    bottom: 45px;
+    background: white;
+    color: black;
+    border-radius: 22px;
+    width: 180px;
+    padding: 15px;
+    gap: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.settings-wrapper.active {
+    display: flex;
+}
+
+.settings-header-section {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.settings-header {
+    font-size: 18px;
+}
+
+.close-settings-button {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    translate: 0 -50%;
+    font-size: 20px;
+}
+
+.settings-content-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding-block: 5px;
+}
+
+.settings-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+}
+
+.stall-timer-section {
+    flex-direction: row;
+    justify-content: space-between;
+    padding-inline: 5px;
+}
+
+.stall-timer-button {
+    width: 25px;
+    height: 25px;
+    position: relative;
+    transition: color 200ms ease;
+}
+
+.stall-timer-button::before {
+    position: absolute;
+    content: attr(data-stall-time);
+    font-size: 10px;
+    top: -2px;
+    left: 6px;
+    font-weight: bolder;
+}
+
+.stall-timer-button:is(:hover, :focus-visible, .active) {
+    color: red;
+}
+
+.section-title {
+    font-weight: 1000;
+    font-size: 16px;
+}
+
+.settings-choice {
+    font-size: 11.5px;
+    padding-inline: 4px;
+    height: 22px;
+    line-height: 22px;
+}
+
+div:not(.settings-choices-dropdown) > .settings-choice {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    word-break: break-all;
+    border: 1px solid black;
+    border-radius: 1.5px;
+}
+
+.settings-choices-dropdown {
+    flex-direction: column;
+    background: white;
+    border-radius: 10px;
+    position: absolute;
+    margin-top: 2px;
+    border: 1px solid black;
+    top: 100%;
+    z-index: 1;
+    padding: 3px;
+    gap: 3px;
+}
+
+.settings-choices-dropdown > .settings-choice {
+    justify-content: unset;
+    white-space: nowrap;
+    border-radius: 5px;
+    transition: background-color 200ms ease;
+}
+
+.settings-choices-dropdown>.settings-choice:hover {
+    color: white;
+    background-color: black;
+}
+
+.settings-choices-dropdown.active {
+    display: flex;
 }
