@@ -156,7 +156,12 @@ function updateConstraints({target}) {
     initPreview()
 }
 
-function settingsChoiceButton({kind, label, deviceId}) {
+function removeAudioConstraint() {
+    recorderConstraints.audio = false
+    initPreview()
+}
+
+function settingsChoiceBtn({kind, label, deviceId}) {
     const button = document.createElement('button')
     button.type = "button"
     button.className = "settings-choice"
@@ -164,6 +169,16 @@ function settingsChoiceButton({kind, label, deviceId}) {
     button.dataset.kind = kind
     button.dataset.deviceId = deviceId 
     button.addEventListener("click", updateConstraints)
+    
+    return button
+}
+
+function noAudioChoiceBtn() {
+    const button = document.createElement('button')
+    button.type = "button"
+    button.className = "settings-choice"
+    button.textContent = button.title = "No Audio"
+    button.addEventListener("click", removeAudioConstraint)
     
     return button
 }
@@ -178,13 +193,14 @@ try {
 
     DOM.videoSettingsDropdown.innerHTML = ''
     DOM.audioSettingsDropdown.innerHTML = ''
-    devices.forEach(device => {
+    devices.filter(device => !device.deviceId.match("^[a-zA-Z]+$")).forEach(device => {
         userMediaDevices.push(device)
         if (device.kind === "videoinput")
-            DOM.videoSettingsDropdown.appendChild(settingsChoiceButton(device))
+            DOM.videoSettingsDropdown.appendChild(settingsChoiceBtn(device))
         else if (device.kind === "audioinput") 
-            DOM.audioSettingsDropdown.appendChild(settingsChoiceButton(device))
+            DOM.audioSettingsDropdown.appendChild(settingsChoiceBtn(device))
     })
+    DOM.audioSettingsDropdown.appendChild(noAudioChoiceBtn())
 } catch(error) {
     logError(error)
 }
