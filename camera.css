@@ -126,7 +126,8 @@ body {
 .settings-button {
     width: 25px;
     height: 25px;
-    z-index: 1;
+    position: absolute;
+    /* z-index: 1; */
 }
 
 .content-body-wrapper {
@@ -362,7 +363,7 @@ body {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.settings-wrapper[data-active="true"] {
+.content-footer-wrapper[data-active="true"] .settings-wrapper {
     display: flex;
 }
 
@@ -429,7 +430,7 @@ body {
     font-size: 16px;
 }
 
-.settings-choice {
+.settings-choice, .media-picker-button {
     width: 100%;
     min-width: 130px;
     text-align: left;
@@ -439,7 +440,7 @@ body {
     padding-inline: 4px;
 }
 
-div:not(.settings-choices-dropdown) > .settings-choice {
+.media-picker-button {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -462,18 +463,18 @@ div:not(.settings-choices-dropdown) > .settings-choice {
     gap: 3px;
 }
 
-.settings-choices-dropdown > .settings-choice {
+.settings-choice {
     justify-content: unset;
     white-space: nowrap;
     border-radius: 5px;
 }
 
-.settings-choices-dropdown>.settings-choice:is(:hover, :focus-visible) {
+.settings-choice:is(:hover, :focus-visible) {
     color: white;
     background-color: black;
     transition: background-color 200ms ease;
 }
 
-.settings-choices-dropdown[data-active="true"] {
+.section-picker-wrapper[data-active="true"] .settings-choices-dropdown {
     display: flex;
 }

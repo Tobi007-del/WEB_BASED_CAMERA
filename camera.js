@@ -125,14 +125,14 @@ const DOM = {
     stopRecordingBtn : container.querySelector(".stop-recording-button"),
     resetBtn : container.querySelector(".reset-button"),
     saveBtn : container.querySelector(".save-button"),
-    settingsWrapper: container.querySelector(".settings-wrapper"),
+    contentFooterWrapper: container.querySelector(".content-footer-wrapper"),
     closeSettingsBtn: container.querySelector(".close-settings-button"),
     stallTimerBtns: container.querySelectorAll(".stall-timer-button"),
-    videoPickerWrapper: container.querySelector(".camera-section .section-picker-wrapper"),
-    videoPickerBtn: container.querySelector(".video-picker-button"),
+    videoPickerWrapper: container.querySelector(".video-section .section-picker-wrapper"),
+    videoPickerBtn: container.querySelector(".video-section .media-picker-button"),
+    videoSettingsDropdown: container.querySelector(".video-section .settings-choices-dropdown"),
     audioPickerWrapper: container.querySelector(".audio-section .section-picker-wrapper"),
-    audioPickerBtn: container.querySelector(".audio-picker-button"),
-    videoSettingsDropdown: container.querySelector(".camera-section .settings-choices-dropdown"),
+    audioPickerBtn: container.querySelector(".audio-section .media-picker-button"),
     audioSettingsDropdown: container.querySelector(".audio-section .settings-choices-dropdown"),
     activeElements: container.querySelectorAll("[data-active]")
 },
@@ -148,7 +148,6 @@ userMediaDevices = [],
 recorderConstraints = {audio:true, video:true}
 
 function deactivateStates({target}) {
-    console.log(target)
     Array.from(DOM.activeElements).filter(element => JSON.parse(element.dataset.active)).forEach(element => {
         if (element === target || element.contains(target)) return
         element.dataset.active = false
@@ -349,7 +348,7 @@ function captureVideo() {
 //EVENT LISTENERS
 window.addEventListener("load", getMediaDevices)
 
-document.addEventListener("click", deactivateStates)
+document.addEventListener("click", deactivateStates, true)
 
 navigator.mediaDevices.addEventListener("devicechange", () => getMediaDevices().then(() => {
     if (!userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.label === DOM.videoPickerBtn.textContent) || !userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.label === DOM.audioPickerBtn.textContent)) initPreview()
@@ -365,19 +364,10 @@ DOM.captureVideoBtn.addEventListener("click", captureVideo)
 
 DOM.stallTimerBtns.forEach(btn => btn.addEventListener("click", editStallDelay))
 
-DOM.closeSettingsBtn.addEventListener("click", () => DOM.settingsWrapper.dataset.active = "false")
+DOM.closeSettingsBtn.addEventListener("click", () => DOM.contentFooterWrapper.dataset.active = "false")
 
-DOM.settingsBtn.addEventListener("click", e => {
-    e.stopPropagation()
-    DOM.settingsWrapper.dataset.active = !JSON.parse(DOM.settingsWrapper.dataset.active)
-})
+DOM.settingsBtn.addEventListener("click", () => DOM.contentFooterWrapper.dataset.active = !JSON.parse(DOM.contentFooterWrapper.dataset.active))
 
-DOM.videoPickerBtn.addEventListener("click", e => {
-    e.stopPropagation()
-    DOM.videoSettingsDropdown.dataset.active = !JSON.parse(DOM.videoSettingsDropdown.dataset.active)
-})
+DOM.videoPickerBtn.addEventListener("click", () => DOM.videoPickerWrapper.dataset.active = !JSON.parse(DOM.videoPickerWrapper.dataset.active))
 
-DOM.audioPickerBtn.addEventListener("click", e => {
-    e.stopPropagation()
-    DOM.audioSettingsDropdown.dataset.active = !JSON.parse(DOM.audioSettingsDropdown.dataset.active)
-})
+DOM.audioPickerBtn.addEventListener("click", () => DOM.audioPickerWrapper.dataset.active = !JSON.parse(DOM.audioPickerWrapper.dataset.active))

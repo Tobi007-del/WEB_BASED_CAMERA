@@ -97,7 +97,7 @@
                 <p class="content-log-message">Permission Denied: PMP Detected, Where you thief this laptop from!</p>
             </div>
         </div>
-        <div class="content-footer-wrapper">
+        <div class="content-footer-wrapper" data-active="false">
             <button type="button" class="settings-button" title="Open Settings">
                 <svg viewbox="0 0 512 512">
                     <path fill="currentColor"
@@ -105,7 +105,7 @@
                     </path>
                 </svg>
             </button>
-            <div class="settings-wrapper" data-active="false">
+            <div class="settings-wrapper">
                 <div class="settings-header-section">
                     <p class="settings-header">Settings</p>
                     <button type="button" title="Close Settings" class="close-settings-button">&times;</button>
@@ -137,18 +137,18 @@
                             </svg>
                         </button>                        
                     </div>
-                    <div class="settings-section camera-section">
+                    <div class="settings-section video-section">
                         <p class="section-title">Camera</p>
-                        <div class="section-picker-wrapper">
-                            <button type="button" class="settings-choice video-picker-button" title="Video Choice">Initializing Camera...</button>
-                            <div class="settings-choices-dropdown" data-active="false"></div>
+                        <div class="section-picker-wrapper" data-active="false">
+                            <button type="button" class="media-picker-button" title="Video Choice">Initializing Camera...</button>
+                            <div class="settings-choices-dropdown"></div>
                         </div>
                     </div>
                     <div class="settings-section audio-section">
                         <p class="section-title">Audio</p>
-                        <div class="section-picker-wrapper">
-                            <button type="button" class="settings-choice audio-picker-button" title="Audio Choice" class="settings-choice">Initializing Microphone...</button>
-                            <div class="settings-choices-dropdown" data-active="false"></div>
+                        <div class="section-picker-wrapper" data-active="false">
+                            <button type="button" class="media-picker-button" title="Audio Choice" class="settings-choice">Initializing Microphone...</button>
+                            <div class="settings-choices-dropdown"></div>
                         </div>
                     </div>
                 </div>
