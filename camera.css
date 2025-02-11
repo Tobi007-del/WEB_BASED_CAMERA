@@ -429,6 +429,7 @@ body {
 
 .settings-choice {
     width: 100%;
+    text-align: left;
     height: 22px;
     line-height: 22px;
     font-size: 11.5px;
