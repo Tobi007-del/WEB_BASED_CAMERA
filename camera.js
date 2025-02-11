@@ -177,7 +177,7 @@ function noAudioChoiceBtn() {
     const button = document.createElement('button')
     button.type = "button"
     button.className = "settings-choice"
-    button.textContent = button.title = "No Audio"
+    button.textContent = button.title = "Without Audio"
     button.addEventListener("click", removeAudioConstraint)
 
     return button
@@ -258,6 +258,8 @@ try {
     if(audioTrack) {
         const audioSettings = audioTrack.getSettings()
         DOM.audioPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === audioSettings.deviceId)?.label
+    } else {
+        DOM.audioPickerBtn.textContent = "Without Audio"
     }
         
     DOM.video.srcObject = stream
