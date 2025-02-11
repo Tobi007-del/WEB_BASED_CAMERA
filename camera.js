@@ -179,7 +179,7 @@ function noAudioChoiceBtn() {
     button.className = "settings-choice"
     button.textContent = button.title = "No Audio"
     button.addEventListener("click", removeAudioConstraint)
-    
+
     return button
 }
 
@@ -193,7 +193,7 @@ try {
 
     DOM.videoSettingsDropdown.innerHTML = ''
     DOM.audioSettingsDropdown.innerHTML = ''
-    devices.filter(device => !device.deviceId.match("^[a-zA-Z]+$")).forEach(device => {
+    devices.forEach(device => {
         userMediaDevices.push(device)
         if (device.kind === "videoinput")
             DOM.videoSettingsDropdown.appendChild(settingsChoiceBtn(device))
@@ -251,10 +251,14 @@ try {
 
     const videoTrack = stream.getVideoTracks()[0]
     const audioTrack = stream.getAudioTracks()[0] 
-    const videoSettings = videoTrack.getSettings()
-    const audioSettings = audioTrack.getSettings()
-    DOM.videoPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === videoSettings.deviceId).label
-    DOM.audioPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === audioSettings.deviceId).label
+    if(videoTrack) {
+        const videoSettings = videoTrack.getSettings()
+        DOM.videoPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === videoSettings.deviceId)?.label
+    } 
+    if(audioTrack) {
+        const audioSettings = audioTrack.getSettings()
+        DOM.audioPickerBtn.textContent = userMediaDevices.find(device => device.deviceId === audioSettings.deviceId)?.label
+    }
         
     DOM.video.srcObject = stream
     DOM.video.captureStream = DOM.video.captureStream || DOM.video.mozCaptureStream
