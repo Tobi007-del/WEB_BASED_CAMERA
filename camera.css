@@ -362,7 +362,7 @@ body {
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.settings-wrapper.active {
+.settings-wrapper[data-active="true"] {
     display: flex;
 }
 
@@ -474,6 +474,6 @@ div:not(.settings-choices-dropdown) > .settings-choice {
     transition: background-color 200ms ease;
 }
 
-.settings-choices-dropdown.active {
+.settings-choices-dropdown[data-active="true"] {
     display: flex;
 }

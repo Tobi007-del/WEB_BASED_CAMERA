@@ -98,40 +98,43 @@
 
 
 //DOM Elements
+const container = document.querySelector(".content-container")
+
 const DOM = {
-    container : document.querySelector(".content-container"),
-    headerWrapper : document.querySelector(".content-header-wrapper"),
-    bodyWrapper : document.querySelector(".content-body-wrapper"),
-    footerWrapper : document.querySelector(".content-footer-wrapper"),
-    heroSection : document.querySelector(".content-hero-section"),
-    recorderSection : document.querySelector(".content-recorder-section"),
-    recorderVideoWrapper : document.querySelector(".content-recorder-video-wrapper"),
-    logSection : document.querySelector(".content-log-section"),
-    logMessage : document.querySelector(".content-log-message"),
-    video : document.querySelector(".recorder-video"),
-    timerVideos : document.querySelectorAll(".stall-timer video"),
-    timerTopWrapper : document.querySelector(".timer-top-wrapper"),
-    timerBottomWrapper : document.querySelector(".timer-bottom-wrapper"),
-    topFlipWrapper : document.querySelector(".top-flip-wrapper"),
-    bottomFlipWrapper : document.querySelector(".bottom-flip-wrapper"),
-    timer : document.querySelector(".recorder-timer"),
-    goBackBtn : document.querySelector(".go-back-button"),
-    settingsBtn : document.querySelector(".settings-button"),
-    heroBtn : document.querySelector(".content-hero-button"),
-    caputrePhotoBtn : document.querySelector(".capture-photo-button"),
-    captureVideoBtn : document.querySelector(".capture-video-button"),
-    stopRecordingBtn : document.querySelector(".stop-recording-button"),
-    resetBtn : document.querySelector(".reset-button"),
-    saveBtn : document.querySelector(".save-button"),
-    settingsWrapper: document.querySelector(".settings-wrapper"),
-    closeSettingsBtn: document.querySelector(".close-settings-button"),
-    stallTimerBtns: document.querySelectorAll(".stall-timer-button"),
-    videoPickerWrapper: document.querySelector(".camera-section .section-picker-wrapper"),
-    videoPickerBtn: document.querySelector(".video-picker-button"),
-    audioPickerWrapper: document.querySelector(".audio-section .section-picker-wrapper"),
-    audioPickerBtn: document.querySelector(".audio-picker-button"),
-    videoSettingsDropdown: document.querySelector(".camera-section .settings-choices-dropdown"),
-    audioSettingsDropdown: document.querySelector(".audio-section .settings-choices-dropdown"),
+    container : container,
+    headerWrapper : container.querySelector(".content-header-wrapper"),
+    bodyWrapper : container.querySelector(".content-body-wrapper"),
+    footerWrapper : container.querySelector(".content-footer-wrapper"),
+    heroSection : container.querySelector(".content-hero-section"),
+    recorderSection : container.querySelector(".content-recorder-section"),
+    recorderVideoWrapper : container.querySelector(".content-recorder-video-wrapper"),
+    logSection : container.querySelector(".content-log-section"),
+    logMessage : container.querySelector(".content-log-message"),
+    video : container.querySelector(".recorder-video"),
+    timerVideos : container.querySelectorAll(".stall-timer video"),
+    timerTopWrapper : container.querySelector(".timer-top-wrapper"),
+    timerBottomWrapper : container.querySelector(".timer-bottom-wrapper"),
+    topFlipWrapper : container.querySelector(".top-flip-wrapper"),
+    bottomFlipWrapper : container.querySelector(".bottom-flip-wrapper"),
+    timer : container.querySelector(".recorder-timer"),
+    goBackBtn : container.querySelector(".go-back-button"),
+    settingsBtn : container.querySelector(".settings-button"),
+    heroBtn : container.querySelector(".content-hero-button"),
+    caputrePhotoBtn : container.querySelector(".capture-photo-button"),
+    captureVideoBtn : container.querySelector(".capture-video-button"),
+    stopRecordingBtn : container.querySelector(".stop-recording-button"),
+    resetBtn : container.querySelector(".reset-button"),
+    saveBtn : container.querySelector(".save-button"),
+    settingsWrapper: container.querySelector(".settings-wrapper"),
+    closeSettingsBtn: container.querySelector(".close-settings-button"),
+    stallTimerBtns: container.querySelectorAll(".stall-timer-button"),
+    videoPickerWrapper: container.querySelector(".camera-section .section-picker-wrapper"),
+    videoPickerBtn: container.querySelector(".video-picker-button"),
+    audioPickerWrapper: container.querySelector(".audio-section .section-picker-wrapper"),
+    audioPickerBtn: container.querySelector(".audio-picker-button"),
+    videoSettingsDropdown: container.querySelector(".camera-section .settings-choices-dropdown"),
+    audioSettingsDropdown: container.querySelector(".audio-section .settings-choices-dropdown"),
+    activeElements: container.querySelectorAll("[data-active]")
 },
 //CONTENT ARRAYS
 sections = ["hero", "recorder"],
@@ -144,14 +147,22 @@ stallTimerDelayInS = 3,
 userMediaDevices = [],
 recorderConstraints = {audio:true, video:true}
 
-function updateConstraints({currentTarget}) {
-    currentTarget.parentElement.classList.remove("active")
+function deactivateStates({target}) {
+    console.log(target)
+    Array.from(DOM.activeElements).filter(element => JSON.parse(element.dataset.active)).forEach(element => {
+        if (element === target || element.contains(target)) return
+        element.dataset.active = false
+    })
+}
 
+function updateConstraints({currentTarget}) {
     const {kind, label, deviceId} = currentTarget.dataset
     if (kind === "videoinput") {
+        DOM.videoSettingsDropdown.dataset.active = false
         DOM.videoPickerBtn.textContent = label
         recorderConstraints.video = {deviceId: {exact: deviceId}}
     } else if (kind === "audioinput") {
+        DOM.audioSettingsDropdown.dataset.active = false
         DOM.audioPickerBtn.textContent = label
         recorderConstraints.audio = {deviceId: {exact: deviceId}}
     }
@@ -160,8 +171,7 @@ function updateConstraints({currentTarget}) {
 }
 
 function removeAudioConstraint() {
-    DOM.audioSettingsDropdown.classList.remove("active")
-
+    DOM.audioSettingsDropdown.dataset.active = false
     DOM.audioPickerBtn.textContent = "Without audio"
     recorderConstraints.audio = false
 
@@ -339,6 +349,8 @@ function captureVideo() {
 //EVENT LISTENERS
 window.addEventListener("load", getMediaDevices)
 
+document.addEventListener("click", deactivateStates, true)
+
 navigator.mediaDevices.addEventListener("devicechange", () => getMediaDevices().then(() => {
     if (!userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.label === DOM.videoPickerBtn.textContent) || !userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.label === DOM.audioPickerBtn.textContent)) initPreview()
 }))
@@ -353,10 +365,10 @@ DOM.captureVideoBtn.addEventListener("click", captureVideo)
 
 DOM.stallTimerBtns.forEach(btn => btn.addEventListener("click", editStallDelay))
 
-DOM.settingsBtn.addEventListener("click", () => DOM.settingsWrapper.classList.toggle("active"))
+DOM.settingsBtn.addEventListener("click", () => DOM.settingsWrapper.dataset.active = !JSON.parse(DOM.settingsWrapper.dataset.active))
 
-DOM.closeSettingsBtn.addEventListener("click", () => DOM.settingsWrapper.classList.remove("active"))
+DOM.closeSettingsBtn.addEventListener("click", () => DOM.settingsWrapper.dataset.active = "false")
 
-DOM.videoPickerBtn.addEventListener("click", () => DOM.videoSettingsDropdown.classList.toggle("active"))
+DOM.videoPickerBtn.addEventListener("click", () => DOM.videoSettingsDropdown.dataset.active = !JSON.parse(DOM.videoSettingsDropdown.dataset.active))
 
-DOM.audioPickerBtn.addEventListener("click", () => DOM.audioSettingsDropdown.classList.toggle("active"))
+DOM.audioPickerBtn.addEventListener("click", () => DOM.audioSettingsDropdown.dataset.active = !JSON.parse(DOM.audioSettingsDropdown.dataset.active))

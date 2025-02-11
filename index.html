@@ -105,7 +105,7 @@
                     </path>
                 </svg>
             </button>
-            <div class="settings-wrapper">
+            <div class="settings-wrapper" data-active="false">
                 <div class="settings-header-section">
                     <p class="settings-header">Settings</p>
                     <button type="button" title="Close Settings" class="close-settings-button">&times;</button>
@@ -141,14 +141,14 @@
                         <p class="section-title">Camera</p>
                         <div class="section-picker-wrapper">
                             <button type="button" class="settings-choice video-picker-button" title="Video Choice">Initializing Camera...</button>
-                            <div class="settings-choices-dropdown"></div>
+                            <div class="settings-choices-dropdown" data-active="false"></div>
                         </div>
                     </div>
                     <div class="settings-section audio-section">
                         <p class="section-title">Audio</p>
                         <div class="section-picker-wrapper">
                             <button type="button" class="settings-choice audio-picker-button" title="Audio Choice" class="settings-choice">Initializing Microphone...</button>
-                            <div class="settings-choices-dropdown"></div>
+                            <div class="settings-choices-dropdown" data-active="false"></div>
                         </div>
                     </div>
                 </div>
