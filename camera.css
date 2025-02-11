@@ -428,10 +428,11 @@ body {
 }
 
 .settings-choice {
-    font-size: 11.5px;
-    padding-inline: 4px;
+    width: 100%;
     height: 22px;
     line-height: 22px;
+    font-size: 11.5px;
+    padding-inline: 4px;
 }
 
 div:not(.settings-choices-dropdown) > .settings-choice {
