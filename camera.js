@@ -157,11 +157,11 @@ function deactivateStates({target}) {
 function updateConstraints({currentTarget}) {
     const {kind, label, deviceId} = currentTarget.dataset
     if (kind === "videoinput") {
-        DOM.videoSettingsDropdown.dataset.active = false
+        DOM.videoPickerWrapper.dataset.active = false
         DOM.videoPickerBtn.textContent = label
         recorderConstraints.video = {deviceId: {exact: deviceId}}
     } else if (kind === "audioinput") {
-        DOM.audioSettingsDropdown.dataset.active = false
+        DOM.audioPickerWrapper.dataset.active = false
         DOM.audioPickerBtn.textContent = label
         recorderConstraints.audio = {deviceId: {exact: deviceId}}
     }
@@ -170,7 +170,7 @@ function updateConstraints({currentTarget}) {
 }
 
 function removeAudioConstraint() {
-    DOM.audioSettingsDropdown.dataset.active = false
+    DOM.audioPickerWrapper.dataset.active = false
     DOM.audioPickerBtn.textContent = "Without audio"
     recorderConstraints.audio = false
 
