@@ -351,6 +351,7 @@ window.addEventListener("load", getMediaDevices)
 document.addEventListener("click", deactivateStates, true)
 
 navigator.mediaDevices.addEventListener("devicechange", () => getMediaDevices().then(() => {
+    if (!DOM.video.srcObject) return
     if (!userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.label === DOM.videoPickerBtn.textContent) || !userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.label === DOM.audioPickerBtn.textContent)) initPreview()
 }))
 

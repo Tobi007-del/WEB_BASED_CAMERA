@@ -42,13 +42,13 @@ body {
         Arial,
         sans-serif, sans-serif;
     color: var(--text-color);
-    overflow: hidden;
+    min-height: 100vh; 
+    justify-items: center; 
+    align-content: center;
 }
 
 .content-container {
-    position: absolute;
-    margin: auto;
-    inset: 0;
+    position: relative;
     width: clamp(400px, 80vw, 500px);
     max-width: 95vw;
     height: fit-content;
@@ -56,6 +56,8 @@ body {
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    margin-top: 20px;
+    margin-bottom: calc((var(--wrapper-height)/-2) + 20px);
 }
 
 .go-back-button,
@@ -201,7 +203,7 @@ body {
 .content-recorder-section video {
     aspect-ratio: auto;
     max-width: 100%;
-    min-height: 320px;
+    min-height: 180px;
     max-height: 90vh;
     background: inherit;
 }
