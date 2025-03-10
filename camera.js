@@ -121,7 +121,7 @@ const DOM = {
     settingsBtn : container.querySelector(".settings-button"),
     heroBtn : container.querySelector(".content-hero-button"),
     caputrePhotoBtn : container.querySelector(".capture-photo-button"),
-    captureVideoBtn : container.querySelector(".capture-video-button"),
+    recordVideoBtn : container.querySelector(".record-video-button"),
     stopRecordingBtn : container.querySelector(".stop-recording-button"),
     resetBtn : container.querySelector(".reset-button"),
     saveBtn : container.querySelector(".save-button"),
@@ -138,14 +138,19 @@ const DOM = {
 },
 //CONTENT ARRAYS
 sections = ["hero", "recorder"],
-recorderActions = ["preview", "record", "finished"],
 //CONSTANTS
-stallTimerDelaynMs = () => stallTimerDelayInS * 1000
+stallTimerDelaynMs = () => stallTimerDelayInS * 1000,
+mediaCanvas = document.createElement("canvas"),
+mediaContext = mediaCanvas.getContext("2d"),
+formatter = new Intl.NumberFormat(undefined, {minimumIntegerDigits: 2})
 //NON-CONSTANTS
 let sectionsIndex = 0,
 stallTimerDelayInS = 3,
 userMediaDevices = [],
-recorderConstraints = {audio:true, video:true}
+recorderConstraints = {audio:true, video:true},
+videoRecorder = null,
+videoData = null,
+videoTimer = null
 
 function deactivateStates({target}) {
     Array.from(DOM.activeElements).filter(element => JSON.parse(element.dataset.active)).forEach(element => {
@@ -165,8 +170,8 @@ function updateConstraints({currentTarget}) {
         DOM.audioPickerBtn.textContent = label
         recorderConstraints.audio = {deviceId: {exact: deviceId}}
     }
-    
-    initPreview()
+
+    startCapturingStream()
 }
 
 function removeAudioConstraint() {
@@ -174,7 +179,7 @@ function removeAudioConstraint() {
     DOM.audioPickerBtn.textContent = "Without audio"
     recorderConstraints.audio = false
 
-    initPreview()
+    startCapturingStream()
 }
 
 function settingsChoiceBtn({kind, label, deviceId}) {
@@ -224,9 +229,15 @@ try {
 }
 }
 
+async function handleMediaDeviceChange() {
+    await getMediaDevices()
+    if (!DOM.video.srcObject) return
+    if (!userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.label === DOM.videoPickerBtn.textContent) || !userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.label === DOM.audioPickerBtn.textContent)) startCapturingStream()
+}
+
 function updateSections() {
     DOM.container.dataset.activeSection = sections[sectionsIndex]
-    stopRecording()
+    stopCapturingStream()
 }
 
 function previousSection() {
@@ -236,7 +247,7 @@ function previousSection() {
 
 function goToSection(section) {
     DOM.container.dataset.activeSection = section
-    stopRecording()
+    stopCapturingStream()
     if (section !== "log") sectionsIndex = sections.indexOf(section)
 }
 
@@ -251,15 +262,13 @@ function logError(error) {
     DOM.logMessage.textContent = error.message
 }
 
-function stopRecording() {
-    if (DOM.video.srcObject) {
-        DOM.video.srcObject.getTracks().forEach(track => track.stop())
-        DOM.recorderSection.dataset.ready = false
-    }
+function stopCapturingStream() {
+    if (DOM.video.srcObject) DOM.video.srcObject.getTracks().forEach(track => track.stop())
 }
 
-async function initPreview() {
+async function startCapturingStream() {
 try {
+    DOM.recorderSection.dataset.action = "preview"
     DOM.recorderSection.dataset.ready = false
     sectionsIndex = 1
     updateSections()
@@ -276,16 +285,17 @@ try {
     if(audioTrack) {
         const audioSettings = audioTrack.getSettings()
         DOM.audioPickerBtn.textContent = userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.deviceId === audioSettings.deviceId)?.label
-    } else {
-        DOM.audioPickerBtn.textContent = "Without audio"
-    }
-        
+    } else DOM.audioPickerBtn.textContent = "Without audio"
+
+    DOM.video.poster = ""
+    DOM.video.src = ""
+    DOM.video.muted = true
+    DOM.video.controls = false
     DOM.video.srcObject = stream
     DOM.video.captureStream = DOM.video.captureStream || DOM.video.mozCaptureStream
-    DOM.video.muted = true
     DOM.video.addEventListener("playing", () => DOM.recorderSection.dataset.ready = true, {once: true})
-    DOM.timerVideos.forEach(video => video.srcObject = stream)
     DOM.video.play()
+    DOM.timerVideos.forEach(video => video.srcObject = stream)
 } catch(error) {
     logError(error)
 }
@@ -333,16 +343,74 @@ if (delayInMs > 1000) {
             resolve(delayInMs / 1000 + " seconds elapsed, stalled user successfully... You can now ride on!")
         }
     }, 1000)
-}
+} else resolve()
 })
 }
 
-function capturePhoto() {
-    stall(stallTimerDelaynMs()).then(res => console.log(res))
+async function capturePhoto() {
+try {
+    await stall(stallTimerDelaynMs())
+    mediaCanvas.width = DOM.video.videoWidth
+    mediaCanvas.height = DOM.video.videoHeight
+    mediaContext.drawImage(DOM.video, 0, 0, mediaCanvas.width, mediaCanvas.height)
+    mediaCanvas.toBlob(blob => {
+        DOM.saveBtn.download = "Photo.png"
+        DOM.saveBtn.href = URL.createObjectURL(blob)
+        DOM.video.poster = DOM.saveBtn.href
+    })
+    DOM.video.src = ""
+    DOM.video.muted = true
+    DOM.video.controls = false
+    stopCapturingStream()
+    DOM.recorderSection.dataset.action = "finished"
+} catch(error) {
+    logError(error)
+}
 }
 
-function captureVideo() {
-    stall(stallTimerDelaynMs()).then(res => console.log(res))
+async function recordVideo() {
+try {
+    await stall(stallTimerDelaynMs())
+    DOM.recorderSection.dataset.action = "record"
+    videoRecorder = new MediaRecorder(DOM.video.captureStream())
+    videoData = []
+    videoRecorder.ondataavailable = event => videoData.push(event.data)
+    videoRecorder.start()
+    let time = 0
+    videoTimer = setInterval(() => DOM.timer.textContent = formatTime(++time), 1000)
+} catch(error) {
+    logError(error)
+}
+}
+
+function formatTime(time) {
+    const hours =  time >= 3600 ? formatter.format(Math.floor(time/3600)) + ":" : ""
+    const minutes = formatter.format(Math.floor(time/60) % 60) + ":"
+    const seconds = formatter.format(time % 60)
+    return hours + minutes + seconds
+}
+
+async function stopRecording() {
+    if (videoRecorder?.state === "recording") {
+        videoRecorder.stop()
+        clearInterval(videoTimer)
+        let videoBlob = new Blob(videoData, { type: 'video/mp4' })
+        console.log(videoData, videoBlob)
+        videoData = []
+        DOM.saveBtn.download = "Video.mp4"
+        DOM.saveBtn.href = URL.createObjectURL(videoBlob)
+        DOM.video.src = DOM.saveBtn.href
+        DOM.video.poster = ""
+        DOM.video.controls = true
+        DOM.video.muted = false
+        stopCapturingStream()
+        DOM.recorderSection.dataset.action = "finished"
+    }
+}
+
+function resetCapture() {
+    DOM.recorderSection.dataset.action = "preview"
+    startCapturingStream()
 }
 
 //EVENT LISTENERS
@@ -350,18 +418,21 @@ window.addEventListener("load", getMediaDevices)
 
 document.addEventListener("click", deactivateStates, true)
 
-navigator.mediaDevices.addEventListener("devicechange", () => getMediaDevices().then(() => {
-    if (!DOM.video.srcObject) return
-    if (!userMediaDevices.filter(device => device.kind === "videoinput").find(device => device.label === DOM.videoPickerBtn.textContent) || !userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.label === DOM.audioPickerBtn.textContent)) initPreview()
-}))
+navigator.mediaDevices.addEventListener("devicechange", handleMediaDeviceChange)
 
 DOM.goBackBtn.addEventListener("click", previousSection)
 
-DOM.heroBtn.addEventListener("click", initPreview)
+DOM.heroBtn.addEventListener("click", startCapturingStream)
 
 DOM.caputrePhotoBtn.addEventListener("click", capturePhoto)
 
-DOM.captureVideoBtn.addEventListener("click", captureVideo)
+DOM.recordVideoBtn.addEventListener("click", recordVideo)
+
+DOM.stopRecordingBtn.addEventListener("click", stopRecording)
+
+DOM.resetBtn.addEventListener("click", resetCapture)
+
+DOM.saveBtn.addEventListener("click", () => URL.revokeObjectURL(DOM.saveBtn.href))
 
 DOM.stallTimerBtns.forEach(btn => btn.addEventListener("click", editStallDelay))
 

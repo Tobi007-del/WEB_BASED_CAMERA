@@ -19,7 +19,7 @@ svg {
     height: 100%;
 }
 
-button {
+button, .save-button {
     border: none;
     color: inherit;
     background-color: transparent;
@@ -28,7 +28,8 @@ button {
     align-items: center;
 }
 
-button:hover {
+button:hover,
+.save-button:hover {
     cursor: pointer;
 }
 
@@ -129,7 +130,6 @@ body {
     width: 25px;
     height: 25px;
     position: absolute;
-    /* z-index: 1; */
 }
 
 .content-body-wrapper {
@@ -203,12 +203,12 @@ body {
 .content-recorder-section video {
     aspect-ratio: auto;
     max-width: 100%;
-    min-height: 180px;
+    min-height: 320px;
     max-height: 90vh;
     background: inherit;
 }
 
-.content-recorder-section[data-action="preview"] video {
+.content-recorder-section:is([data-action="preview"], [data-action="record"]) video {
     transform: scaleX(-1);
 }
 
@@ -328,7 +328,7 @@ body {
     column-gap: 30px;
 }
 
-.content-recorder-section[data-action="preview"] :is(.capture-photo-button, .capture-video-button),
+.content-recorder-section[data-action="preview"] :is(.capture-photo-button, .record-video-button),
 .content-recorder-section[data-action="record"] .stop-recording-button,
 .content-recorder-section[data-action="finished"] :is(.reset-button, .save-button) {
     display: flex;
