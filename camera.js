@@ -145,7 +145,7 @@ mediaContext = mediaCanvas.getContext("2d"),
 formatter = new Intl.NumberFormat(undefined, {minimumIntegerDigits: 2})
 //NON-CONSTANTS
 let sectionsIndex = 0,
-stallTimerDelayInS = 3,
+stallTimerDelayInS = 0,
 userMediaDevices = [],
 recorderConstraints = {audio:true, video:true},
 videoRecorder = null,
@@ -238,6 +238,10 @@ async function handleMediaDeviceChange() {
 function updateSections() {
     DOM.container.dataset.activeSection = sections[sectionsIndex]
     stopCapturingStream()
+    DOM.video.poster = ""
+    DOM.video.src = ""
+    DOM.video.muted = true
+    DOM.video.tmgcontrols = false
 }
 
 function previousSection() {
@@ -287,10 +291,6 @@ try {
         DOM.audioPickerBtn.textContent = userMediaDevices.filter(device => device.kind === "audioinput").find(device => device.deviceId === audioSettings.deviceId)?.label
     } else DOM.audioPickerBtn.textContent = "Without audio"
 
-    DOM.video.poster = ""
-    DOM.video.src = ""
-    DOM.video.muted = true
-    DOM.video.controls = false
     DOM.video.srcObject = stream
     DOM.video.captureStream = DOM.video.captureStream || DOM.video.mozCaptureStream
     DOM.video.addEventListener("playing", () => DOM.recorderSection.dataset.ready = true, {once: true})
@@ -343,7 +343,7 @@ if (delayInMs > 1000) {
             resolve(delayInMs / 1000 + " seconds elapsed, stalled user successfully... You can now ride on!")
         }
     }, 1000)
-} else resolve()
+} else resolve("Not stalling user, You can ride on!")
 })
 }
 
@@ -355,14 +355,13 @@ try {
     mediaContext.drawImage(DOM.video, 0, 0, mediaCanvas.width, mediaCanvas.height)
     mediaCanvas.toBlob(blob => {
         DOM.saveBtn.download = "Photo.png"
-        DOM.saveBtn.href = URL.createObjectURL(blob)
-        DOM.video.poster = DOM.saveBtn.href
+        DOM.saveBtn.href = DOM.video.poster = URL.createObjectURL(blob)
+        DOM.video.src = ""
+        DOM.video.muted = true
+        DOM.video.tmgcontrols = false
+        stopCapturingStream()
+        DOM.recorderSection.dataset.action = "finished"        
     })
-    DOM.video.src = ""
-    DOM.video.muted = true
-    DOM.video.controls = false
-    stopCapturingStream()
-    DOM.recorderSection.dataset.action = "finished"
 } catch(error) {
     logError(error)
 }
@@ -374,7 +373,7 @@ try {
     DOM.recorderSection.dataset.action = "record"
     videoRecorder = new MediaRecorder(DOM.video.captureStream())
     videoData = []
-    videoRecorder.ondataavailable = event => videoData.push(event.data)
+    videoRecorder.onerror = event => logError(event)
     videoRecorder.start()
     let time = 0
     videoTimer = setInterval(() => DOM.timer.textContent = formatTime(++time), 1000)
@@ -392,19 +391,22 @@ function formatTime(time) {
 
 async function stopRecording() {
     if (videoRecorder?.state === "recording") {
+        videoRecorder.ondataavailable = event => videoData.push(event.data)
+        videoRecorder.onstop = () => {
+            clearInterval(videoTimer)
+            DOM.timer.textContent = "00:00"
+            let videoBlob = new Blob(videoData, { type: 'video/webm' })
+            console.log(videoData, videoBlob)
+            DOM.saveBtn.download = "Video.webm"
+            DOM.saveBtn.href = DOM.video.src = URL.createObjectURL(videoBlob)
+            console.log(DOM.video.src)
+            DOM.video.poster = ""
+            DOM.video.tmgcontrols = true
+            DOM.video.muted = false
+            stopCapturingStream()
+            DOM.recorderSection.dataset.action = "finished"
+        }
         videoRecorder.stop()
-        clearInterval(videoTimer)
-        let videoBlob = new Blob(videoData, { type: 'video/mp4' })
-        console.log(videoData, videoBlob)
-        videoData = []
-        DOM.saveBtn.download = "Video.mp4"
-        DOM.saveBtn.href = URL.createObjectURL(videoBlob)
-        DOM.video.src = DOM.saveBtn.href
-        DOM.video.poster = ""
-        DOM.video.controls = true
-        DOM.video.muted = false
-        stopCapturingStream()
-        DOM.recorderSection.dataset.action = "finished"
     }
 }
 
@@ -432,7 +434,7 @@ DOM.stopRecordingBtn.addEventListener("click", stopRecording)
 
 DOM.resetBtn.addEventListener("click", resetCapture)
 
-DOM.saveBtn.addEventListener("click", () => URL.revokeObjectURL(DOM.saveBtn.href))
+// DOM.saveBtn.addEventListener("click", () => URL.revokeObjectURL(DOM.saveBtn.href))
 
 DOM.stallTimerBtns.forEach(btn => btn.addEventListener("click", editStallDelay))
 

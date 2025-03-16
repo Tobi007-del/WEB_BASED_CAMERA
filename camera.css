@@ -8,6 +8,10 @@
     --wrapper-height: 46.5px;
 }
 
+.T_M_G-video-container {
+    --T_M_G-video-border-radius: 0;
+}
+
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
