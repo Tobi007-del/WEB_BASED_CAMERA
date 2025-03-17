@@ -1,102 +1,3 @@
-// let preview = document.getElementById("preview");
-// let recording = document.getElementById("recording");
-// let startButton = document.getElementById("startButton");
-// let stopButton = document.getElementById("stopButton");
-// let downloadButton = document.getElementById("downloadButton");
-// let logElement = document.getElementById("log");
-
-// let recordingTimeMS = 5000;
-
-// function log(msg) {
-//     logElement.innerText += `${msg}\n`;
-// }
-
-// function wait(delayInMs) {
-//     return new Promise(resolve => setTimeout(resolve, delayInMs))
-// }
-
-// function startRecording(stream, lengthInMS) {
-//     let recorder = new MediaRecorder(stream);
-//     let data = [];
-
-//     recorder.ondataavailable = event => data.push(event.data);
-//     recorder.start();
-//     log(`${recorder.state} for ${lengthInMS / 1000} seconds`);
-
-//     let stopped = new Promise((resolve, reject) => {
-//         recorder.onstop = resolve;
-//         recorder.onerror = event => reject(event.filename);
-//     });
-
-//     let recorded = wait(lengthInMS).then(() => {
-//         if (recorder.state === "recording") {
-//             recorder.stop();
-//         }
-//     });
-
-//     return Promise.all([stopped, recorded]).then(() => data);
-// }
-
-// function stop(stream) {
-//     stream.getTracks().forEach(track => track.stop());
-// }
-
-// startButton.addEventListener("click", () => {
-//     navigator.mediaDevices
-//     .getUserMedia({
-//         video: true, 
-//         audio: true
-//     })
-//     .then(stream => {
-//         preview.srcObject = stream;
-//         preview.captureStream = preview.captureStream || preview.mozCaptureStream;
-//         return new Promise(resolve => preview.onplaying = resolve);
-//     })
-//     .then(() => startRecording(preview.captureStream(), recordingTimeMS))
-//     .then(recordedChunks => {
-//         let recordedBlob = new Blob(recordedChunks, { type: "video/mp4" });
-//         recording.src = URL.createObjectURL(recordedBlob);
-//         recording.load()
-//         downloadButton.href = recording.src;
-//         downloadButton.download = "RecordedVideo.webm";
-
-//         log(`Successfully recored ${recordedBlob.size} bytes of ${recordedBlob.type} media.`);
-//     })
-//     .catch(error => {
-//         if (error.name === "NotFoundError") {
-//             log("Camera or microphone not found. Can't record.")
-//         } else {
-//             log(error);
-//         }
-//     });
-//     },
-//     false,
-// );
-
-// stopButton.addEventListener("click", () => {
-//         stop(preview.srcObject);
-//     },
-//     false,
-// );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //DOM Elements
 const container = document.querySelector(".content-container")
 
@@ -150,6 +51,8 @@ userMediaDevices = [],
 recorderConstraints = {audio:true, video:true},
 videoRecorder = null,
 videoData = null,
+videoBlob = null,
+videoURL = null,
 videoTimer = null
 
 function deactivateStates({target}) {
@@ -267,7 +170,10 @@ function logError(error) {
 }
 
 function stopCapturingStream() {
-    if (DOM.video.srcObject) DOM.video.srcObject.getTracks().forEach(track => track.stop())
+    if (DOM.video.srcObject) {
+        DOM.video.srcObject.getTracks().forEach(track => track.stop())
+        DOM.video.srcObject = null
+    }
 }
 
 async function startCapturingStream() {
@@ -372,7 +278,6 @@ try {
     await stall(stallTimerDelaynMs())
     DOM.recorderSection.dataset.action = "record"
     videoRecorder = new MediaRecorder(DOM.video.captureStream())
-    videoData = []
     videoRecorder.onerror = event => logError(event)
     videoRecorder.start()
     let time = 0
@@ -391,19 +296,20 @@ function formatTime(time) {
 
 async function stopRecording() {
     if (videoRecorder?.state === "recording") {
+        videoData = []
         videoRecorder.ondataavailable = event => videoData.push(event.data)
         videoRecorder.onstop = () => {
             clearInterval(videoTimer)
             DOM.timer.textContent = "00:00"
-            let videoBlob = new Blob(videoData, {type: "video/webm"})
-            const videoURL = URL.createObjectURL(videoBlob)
-            console.log(videoData, videoBlob, videoURL)
+            videoBlob = new Blob(videoData, {type: "video/webm"})
+            videoURL = URL.createObjectURL(videoBlob)
             DOM.saveBtn.download = "Video.webm"
             DOM.saveBtn.href = DOM.video.src = videoURL
             DOM.video.poster = ""
             DOM.video.tmgcontrols = true
             DOM.video.muted = false
             stopCapturingStream()
+            videoData = videoBlob = videoURL = null
             DOM.recorderSection.dataset.action = "finished"
         }
         videoRecorder.stop()
@@ -433,8 +339,6 @@ DOM.recordVideoBtn.addEventListener("click", recordVideo)
 DOM.stopRecordingBtn.addEventListener("click", stopRecording)
 
 DOM.resetBtn.addEventListener("click", resetCapture)
-
-// DOM.saveBtn.addEventListener("click", () => URL.revokeObjectURL(DOM.saveBtn.href))
 
 DOM.stallTimerBtns.forEach(btn => btn.addEventListener("click", editStallDelay))
 
