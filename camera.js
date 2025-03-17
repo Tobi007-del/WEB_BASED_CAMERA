@@ -395,11 +395,11 @@ async function stopRecording() {
         videoRecorder.onstop = () => {
             clearInterval(videoTimer)
             DOM.timer.textContent = "00:00"
-            let videoBlob = new Blob(videoData, { type: 'video/webm' })
-            console.log(videoData, videoBlob)
+            let videoBlob = new Blob(videoData, {type: "video/webm"})
+            const videoURL = URL.createObjectURL(videoBlob)
+            console.log(videoData, videoBlob, videoURL)
             DOM.saveBtn.download = "Video.webm"
-            DOM.saveBtn.href = DOM.video.src = URL.createObjectURL(videoBlob)
-            console.log(DOM.video.src)
+            DOM.saveBtn.href = DOM.video.src = videoURL
             DOM.video.poster = ""
             DOM.video.tmgcontrols = true
             DOM.video.muted = false

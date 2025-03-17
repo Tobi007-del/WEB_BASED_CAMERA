@@ -206,6 +206,7 @@ body {
 
 .content-recorder-section video {
     aspect-ratio: auto;
+    width: unset;
     max-width: 100%;
     min-height: 320px;
     max-height: 90vh;
