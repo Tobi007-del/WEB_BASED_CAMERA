@@ -142,9 +142,9 @@ function updateSections() {
     DOM.container.dataset.activeSection = sections[sectionsIndex]
     stopCapturingStream()
     DOM.video.poster = ""
-    DOM.video.src = ""
+    // DOM.video.src = ""
     DOM.video.muted = true
-    DOM.video.tmgcontrols = false
+    DOM.video.controls = false
 }
 
 function previousSection() {
@@ -176,7 +176,7 @@ function stopCapturingStream() {
     }
 }
 
-async function startCapturingStream() {
+async function startCapturingStream() { 
 try {
     DOM.recorderSection.dataset.action = "preview"
     DOM.recorderSection.dataset.ready = false
@@ -262,9 +262,9 @@ try {
     mediaCanvas.toBlob(blob => {
         DOM.saveBtn.download = "Photo.png"
         DOM.saveBtn.href = DOM.video.poster = URL.createObjectURL(blob)
-        DOM.video.src = ""
+        // DOM.video.src = ""
         DOM.video.muted = true
-        DOM.video.tmgcontrols = false
+        DOM.video.controls = false
         stopCapturingStream()
         DOM.recorderSection.dataset.action = "finished"        
     })
@@ -302,11 +302,13 @@ async function stopRecording() {
             clearInterval(videoTimer)
             DOM.timer.textContent = "00:00"
             videoBlob = new Blob(videoData, {type: "video/webm"})
+            URL.revokeObjectURL(DOM.video.src)
             videoURL = URL.createObjectURL(videoBlob)
             DOM.saveBtn.download = "Video.webm"
             DOM.saveBtn.href = DOM.video.src = videoURL
+            DOM.video.load()
             DOM.video.poster = ""
-            DOM.video.tmgcontrols = true
+            DOM.video.controls = true
             DOM.video.muted = false
             stopCapturingStream()
             videoData = videoBlob = videoURL = null
