@@ -46,7 +46,7 @@ mediaContext = mediaCanvas.getContext("2d"),
 formatter = new Intl.NumberFormat(undefined, {minimumIntegerDigits: 2})
 //NON-CONSTANTS
 let sectionsIndex = 0,
-stallTimerDelayInS = 0,
+stallTimerDelayInS = 3,
 userMediaDevices = [],
 recorderConstraints = {audio:true, video:true},
 videoRecorder = null,
