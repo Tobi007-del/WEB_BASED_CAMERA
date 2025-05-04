@@ -21,7 +21,7 @@ const DOM = {
     goBackBtn : container.querySelector(".go-back-button"),
     settingsBtn : container.querySelector(".settings-button"),
     heroBtn : container.querySelector(".content-hero-button"),
-    caputrePhotoBtn : container.querySelector(".capture-photo-button"),
+    capturePhotoBtn : container.querySelector(".capture-photo-button"),
     recordVideoBtn : container.querySelector(".record-video-button"),
     stopRecordingBtn : container.querySelector(".stop-recording-button"),
     resetBtn : container.querySelector(".reset-button"),
@@ -334,7 +334,7 @@ DOM.goBackBtn.addEventListener("click", previousSection)
 
 DOM.heroBtn.addEventListener("click", startCapturingStream)
 
-DOM.caputrePhotoBtn.addEventListener("click", capturePhoto)
+DOM.capturePhotoBtn.addEventListener("click", capturePhoto)
 
 DOM.recordVideoBtn.addEventListener("click", recordVideo)
 
