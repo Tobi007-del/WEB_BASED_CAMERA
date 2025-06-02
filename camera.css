@@ -48,8 +48,9 @@ body {
         sans-serif, sans-serif;
     color: var(--text-color);
     min-height: 100vh; 
-    justify-items: center; 
-    align-content: center;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
 }
 
 .content-container {
