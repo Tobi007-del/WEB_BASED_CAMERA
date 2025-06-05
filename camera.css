@@ -1,69 +1,69 @@
 :root {
-    --text-color: white;
-    --theme-color: #111;
-    --theme-accent-color-1: #222;
-    --theme-accent-color-2: #333;
-    --theme-accent-color-3: #444;
-    --border: 1.25px solid var(--theme-accent-color-3);
-    --wrapper-height: 46.5px;
+  --text-color: white;
+  --theme-color: #111;
+  --theme-accent-color-1: #222;
+  --theme-accent-color-2: #333;
+  --theme-accent-color-3: #444;
+  --border: 1.25px solid var(--theme-accent-color-3);
+  --wrapper-height: 46.5px;
 }
 
 .T_M_G-video-container {
-    --T_M_G-video-border-radius: 0;
+  --T_M_G-video-border-radius: 0;
 }
 
 *, *::before, *::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 svg {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 button, .save-button {
-    border: none;
-    color: inherit;
-    background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  border: none;
+  color: inherit;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 button:hover,
 .save-button:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 body {
-    animation: change-color 2s infinite linear forwards;
-    background: var(--theme-color);
-    font-family: 'Trebuchet MS',
-        'Lucida Sans Unicode',
-        'Lucida Grande',
-        'Lucida Sans',
-        Arial,
-        sans-serif, sans-serif;
-    color: var(--text-color);
-    min-height: 100vh; 
-    display: flex;
-    justify-content: center; 
-    align-items: center;
+  animation: change-color 2s infinite linear forwards;
+  background: var(--theme-color);
+  font-family: 'Trebuchet MS',
+    'Lucida Sans Unicode',
+    'Lucida Grande',
+    'Lucida Sans',
+    Arial,
+    sans-serif, sans-serif;
+  color: var(--text-color);
+  min-height: 100vh; 
+  display: flex;
+  justify-content: center; 
+  align-items: center;
 }
 
 .content-container {
-    position: relative;
-    width: clamp(400px, 80vw, 500px);
-    max-width: 95vw;
-    height: fit-content;
-    background: var(--theme-accent-color-1);
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 20px;
-    margin-bottom: calc((var(--wrapper-height)/-2) + 20px);
+  position: relative;
+  width: clamp(400px, 80vw, 500px);
+  max-width: 95vw;
+  height: fit-content;
+  background: var(--theme-accent-color-1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-bottom: calc((var(--wrapper-height)/-2) + 20px);
 }
 
 .go-back-button,
@@ -80,410 +80,410 @@ body {
 .settings-button,
 .settings-wrapper,
 .settings-choices-dropdown {
-    display: none;
+  display: none;
 }
 
 .content-container[data-active-section="hero"] :is(.content-hero-header, .content-hero-section),
 :is(.content-container[data-active-section="recorder"], .content-container[data-active-section="log"]) :is(.go-back-button, .content-footer-wrapper),
 .content-container[data-active-section="recorder"] .content-recorder-section,
 .content-container[data-active-section="log"] .content-log-section {
-    display: flex;
+  display: flex;
 }
 
 .content-container:has(.content-recorder-section:not([data-action="record"], [data-action="finished"])) .settings-button {
-    display: flex;
+  display: flex;
 }
 
 .content-container:not([data-active-section="hero"]) :is(.content-header-wrapper, .content-footer-wrapper) {
-    background: black;
+  background: black;
 }
 
 .content-header-wrapper {
-    flex: 0 0 var(--wrapper-height);
-    border-bottom: var(--border);
-    display: flex;
-    align-items: center;
-    font-weight: bolder;
-    padding-inline: 20px;
-    border-top-left-radius: inherit;
-    border-top-right-radius: inherit;
+  flex: 0 0 var(--wrapper-height);
+  border-bottom: var(--border);
+  display: flex;
+  align-items: center;
+  font-weight: bolder;
+  padding-inline: 20px;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
 }
 
 .go-back-button {
-    flex: 0 0 27px;
-    height: 27px;
-    padding: 7px;
-    justify-content: center;
-    align-items: center;
-    border-radius: 7px;
-    border: var(--border);
+  flex: 0 0 27px;
+  height: 27px;
+  padding: 7px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 7px;
+  border: var(--border);
 }
 
 .content-hero-header {
-    flex: 1;
-    text-align: center;
-    justify-content: center;
+  flex: 1;
+  text-align: center;
+  justify-content: center;
 }
 
 .content-footer-wrapper {
-    flex: 0 0 var(--wrapper-height);
-    align-items: center;
-    padding-inline: 10px;
+  flex: 0 0 var(--wrapper-height);
+  align-items: center;
+  padding-inline: 10px;
 }
 
 .settings-button {
-    width: 25px;
-    height: 25px;
-    position: absolute;
+  width: 25px;
+  height: 25px;
+  position: absolute;
 }
 
 .content-body-wrapper {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .content-hero-section {
-    align-items: center;
-    justify-content: center;
-    height: 250px;
-    width: 100%;
-    padding: 20px;
+  align-items: center;
+  justify-content: center;
+  height: 250px;
+  width: 100%;
+  padding: 20px;
 }
 
 .content-hero-button {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    height: 100%;
-    width: 100%;
-    background-color: var(--theme-accent-color-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  height: 100%;
+  width: 100%;
+  background-color: var(--theme-accent-color-3);
 }
 
 .content-hero-button:hover {
-    border: 2px solid lightblue;
-    box-shadow: 0px 0px 0px 4px rgba(0, 0, 255, 0.5);
+  border: 2px solid lightblue;
+  box-shadow: 0px 0px 0px 4px rgba(0, 0, 255, 0.5);
 }
 
 .content-hero-image {
-    width: 75px;
-    aspect-ratio: 1 / 1;
+  width: 75px;
+  aspect-ratio: 1 / 1;
 }
 
 .content-hero-text {
-    font-size: 12.5px;
+  font-size: 12.5px;
 }
 
 .content-recorder-section {
-    width: 100%;
+  width: 100%;
 }
 
 .content-recorder-pre-stream-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding-block: 100px;
-    font-size: 18px;
-    color: rgb(24, 132, 255);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-block: 100px;
+  font-size: 18px;
+  color: rgb(24, 132, 255);
 }
 
 .content-recorder-section[data-ready="true"] .content-recorder-pre-stream-wrapper {
-    display: none;
+  display: none;
 }
 
 .content-recorder-video-wrapper {
-    width: 100%;
-    height: fit-content;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    background: black;
+  width: 100%;
+  height: fit-content;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: black;
 }
 
 .content-recorder-section video {
-    aspect-ratio: auto;
-    width: unset;
-    max-width: 100%;
-    min-height: 320px;
-    max-height: 90vh;
-    background: inherit;
+  aspect-ratio: auto;
+  width: unset;
+  max-width: 100%;
+  min-height: 320px;
+  max-height: 90vh;
+  background: inherit;
 }
 
 .content-recorder-section:is([data-action="preview"], [data-action="record"]) video {
-    transform: scaleX(-1);
+  transform: scaleX(-1);
 }
 
 .content-recorder-section.stall .stall-timer {
-    display: flex;
+  display: flex;
 }
 
 .stall-timer {
-    flex-direction: column;
-    box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
-    border-radius: 1.5px;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    perspective: 2500px;
-    background: inherit;
+  flex-direction: column;
+  box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 1.5px;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  perspective: 2500px;
+  background: inherit;
 }
 
 .timer-section-wrapper {
-    position: relative;
-    height: 50%;
-    overflow: hidden;
-    background: inherit;
+  position: relative;
+  height: 50%;
+  overflow: hidden;
+  background: inherit;
 }
 
 .timer-top-wrapper,
 .top-flip-wrapper {
-    border-bottom: .1px solid rgba(0, 0, 0, 0.75);
+  border-bottom: .1px solid rgba(0, 0, 0, 0.75);
 }
 
 .timer-bottom-wrapper,
 .bottom-flip-wrapper {
-    display: flex;
-    align-items: flex-end;
+  display: flex;
+  align-items: flex-end;
 }
 
 .top-flip-wrapper,
 .bottom-flip-wrapper {
-    position: absolute;
-    opacity: 0;
-    transform-style: preserve-3d;
-    will-change: transform;
+  position: absolute;
+  opacity: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .top-flip-wrapper {
-    transform-origin: bottom;
+  transform-origin: bottom;
 }
 
 .top-flip-wrapper.flip {
-    opacity: 1;
-    animation: flip-top 250ms ease-in;
+  opacity: 1;
+  animation: flip-top 250ms ease-in;
 }
 
 @keyframes flip-top {
-    100% {
-        transform: rotateX(90deg);
-    }
+  100% {
+    transform: rotateX(90deg);
+  }
 }
 
 .bottom-flip-wrapper {
-    bottom: 0;
-    transform: rotateX(90deg);
-    transform-origin: top;
+  bottom: 0;
+  transform: rotateX(90deg);
+  transform-origin: top;
 }
 
 .bottom-flip-wrapper.flip {
-    opacity: 1;
-    animation: flip-bottom 250ms ease-in 250ms;
+  opacity: 1;
+  animation: flip-bottom 250ms ease-in 250ms;
 }
 
 @keyframes flip-bottom {
-    100% {
-        transform: rotateX(0deg);
-    }
+  100% {
+    transform: rotateX(0deg);
+  }
 }
 
 .timer-section {
-    height: fit-content;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: inherit;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: inherit;
 }
 
 .timer-section p {
-    position: absolute;
-    font-size: 80px;
-    z-index: 1;
+  position: absolute;
+  font-size: 80px;
+  z-index: 1;
 }
 
 .top-flip-wrapper,
 .bottom-flip-wrapper {
-    z-index: 1;
+  z-index: 1;
 }
 
 .content-recorder-timer-wrapper {
-    position: absolute; 
-    bottom: 0;
-    right: 0;
-    padding: 10px;
-    font-size: 25px;
+  position: absolute; 
+  bottom: 0;
+  right: 0;
+  padding: 10px;
+  font-size: 25px;
 }
 
 .content-recorder-section[data-ready="true"][data-action="record"] .content-recorder-timer-wrapper,
 .content-recorder-section[data-ready="true"] :is(.content-recorder-controls-wrapper, .content-recorder-video-wrapper) {
-    display: flex;
+  display: flex;
 }
 
 .content-recorder-controls-wrapper {
-    position: absolute;
-    height: fit-content;
-    inset-inline: 0;
-    bottom: calc(var(--wrapper-height)/-2);
-    justify-content: center;
-    padding-inline: 20px;
-    flex-wrap: wrap;
-    column-gap: 30px;
+  position: absolute;
+  height: fit-content;
+  inset-inline: 0;
+  bottom: calc(var(--wrapper-height)/-2);
+  justify-content: center;
+  padding-inline: 20px;
+  flex-wrap: wrap;
+  column-gap: 30px;
 }
 
 .content-recorder-section[data-action="preview"] :is(.capture-photo-button, .record-video-button),
 .content-recorder-section[data-action="record"] .stop-recording-button,
 .content-recorder-section[data-action="finished"] :is(.reset-button, .save-button) {
-    display: flex;
+  display: flex;
 }
 
 .controls-button {
-    width: 45px;
-    height: 45px;
-    background-color: red;
-    padding: 16.5px;
-    border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  background-color: red;
+  padding: 16.5px;
+  border-radius: 50%;
 }
 
 .save-button {
-    background-color: rgb(110, 248, 110)
+  background-color: rgb(110, 248, 110)
 }
 
 .content-log-section {
-    padding: 70px 20px;
-    font-size: 18px;
-    color: rgba(255, 0, 0, 0.85);
+  padding: 70px 20px;
+  font-size: 18px;
+  color: rgba(255, 0, 0, 0.85);
 }
 
 .settings-wrapper {
-    flex-direction: column;
-    position: absolute;
-    bottom: 45px;
-    background: white;
-    color: black;
-    border-radius: 22px;
-    width: 180px;
-    padding: 15px;
-    gap: 10px;
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+  position: absolute;
+  bottom: 45px;
+  background: white;
+  color: black;
+  border-radius: 22px;
+  width: 180px;
+  padding: 15px;
+  gap: 10px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .content-footer-wrapper[data-active="true"] .settings-wrapper {
-    display: flex;
+  display: flex;
 }
 
 .settings-header-section {
-    display: flex;
-    justify-content: center;
-    position: relative;
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
 .settings-header {
-    font-size: 18px;
+  font-size: 18px;
 }
 
 .close-settings-button {
-    position: absolute;
-    right: 0;
-    top: 50%;
-    translate: 0 -50%;
-    font-size: 20px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  translate: 0 -50%;
+  font-size: 20px;
 }
 
 .settings-content-section {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    padding-block: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-block: 5px;
 }
 
 .settings-section {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
 }
 
 .stall-timer-section {
-    flex-direction: row;
-    justify-content: space-between;
-    padding-inline: 5px;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-inline: 5px;
 }
 
 .stall-timer-button {
-    width: 25px;
-    height: 25px;
-    position: relative;
-    transition: color 200ms ease;
+  width: 25px;
+  height: 25px;
+  position: relative;
+  transition: color 200ms ease;
 }
 
 .stall-timer-button::before {
-    position: absolute;
-    content: attr(data-stall-time);
-    font-size: 10px;
-    top: -2px;
-    left: 6px;
-    font-weight: bolder;
+  position: absolute;
+  content: attr(data-stall-time);
+  font-size: 10px;
+  top: -2px;
+  left: 6px;
+  font-weight: bolder;
 }
 
 .stall-timer-button:is(:hover, :focus-visible, .active) {
-    color: red;
+  color: red;
 }
 
 .section-title {
-    font-weight: 1000;
-    font-size: 16px;
+  font-weight: 1000;
+  font-size: 16px;
 }
 
 .settings-choice, .media-picker-button {
-    width: 100%;
-    min-width: 130px;
-    text-align: left;
-    height: 22px;
-    line-height: 22px;
-    font-size: 11.5px;
-    padding-inline: 4px;
+  width: 100%;
+  min-width: 130px;
+  text-align: left;
+  height: 22px;
+  line-height: 22px;
+  font-size: 11.5px;
+  padding-inline: 4px;
 }
 
 .media-picker-button {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
-    overflow: hidden;
-    word-break: break-all;
-    border: 1px solid black;
-    border-radius: 1.5px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  word-break: break-all;
+  border: 1px solid black;
+  border-radius: 1.5px;
 }
 
 .settings-choices-dropdown {
-    flex-direction: column;
-    background: white;
-    border-radius: 10px;
-    position: absolute;
-    margin-top: 2px;
-    border: 1px solid black;
-    top: 100%;
-    z-index: 1;
-    padding: 3px;
-    gap: 3px;
+  flex-direction: column;
+  background: white;
+  border-radius: 10px;
+  position: absolute;
+  margin-top: 2px;
+  border: 1px solid black;
+  top: 100%;
+  z-index: 1;
+  padding: 3px;
+  gap: 3px;
 }
 
 .settings-choice {
-    justify-content: unset;
-    white-space: nowrap;
-    border-radius: 5px;
+  justify-content: unset;
+  white-space: nowrap;
+  border-radius: 5px;
 }
 
 .settings-choice:is(:hover, :focus-visible) {
-    color: white;
-    background-color: black;
-    transition: background-color 200ms ease;
+  color: white;
+  background-color: black;
+  transition: background-color 200ms ease;
 }
 
 .section-picker-wrapper[data-active="true"] .settings-choices-dropdown {
-    display: flex;
+  display: flex;
 }
