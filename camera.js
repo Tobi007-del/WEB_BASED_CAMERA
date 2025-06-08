@@ -253,9 +253,21 @@ if (delayInMs > 1000) {
 })
 }
 
+function disableBtns() {
+  DOM.capturePhotoBtn.disabled = true
+  DOM.recordVideoBtn.disabled = true
+}
+
+function enableBtns() {
+  DOM.capturePhotoBtn.disabled = false
+  DOM.recordVideoBtn.disabled = false
+}
+
 async function capturePhoto() {
 try {
+  disableBtns()
   await stall(stallTimerDelaynMs())
+  enableBtns()
   mediaCanvas.width = DOM.video.videoWidth
   mediaCanvas.height = DOM.video.videoHeight
   mediaContext.drawImage(DOM.video, 0, 0, mediaCanvas.width, mediaCanvas.height)
@@ -273,7 +285,9 @@ try {
 
 async function recordVideo() {
 try {
+  disableBtns()
   await stall(stallTimerDelaynMs())
+  enableBtns()
   DOM.recorderSection.dataset.action = "record"
   videoRecorder = new MediaRecorder(DOM.video.captureStream())
   videoRecorder.onerror = event => logError(event)
