@@ -12,7 +12,9 @@
   --T_M_G-video-border-radius: 0;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -23,7 +25,8 @@ svg {
   height: 100%;
 }
 
-button, .save-button {
+button,
+.save-button {
   border: none;
   color: inherit;
   background-color: transparent;
@@ -40,16 +43,13 @@ button:hover,
 body {
   animation: change-color 2s infinite linear forwards;
   background: var(--theme-color);
-  font-family: 'Trebuchet MS',
-    'Lucida Sans Unicode',
-    'Lucida Grande',
-    'Lucida Sans',
-    Arial,
-    sans-serif, sans-serif;
+  font-family:
+    "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+    Arial, sans-serif, sans-serif;
   color: var(--text-color);
-  min-height: 100vh; 
+  min-height: 100vh;
   display: flex;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
 }
 
@@ -63,7 +63,7 @@ body {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
-  margin-bottom: calc((var(--wrapper-height)/-2) + 20px);
+  margin-bottom: calc((var(--wrapper-height) / -2) + 20px);
 }
 
 .go-back-button,
@@ -83,18 +83,30 @@ body {
   display: none;
 }
 
-.content-container[data-active-section="hero"] :is(.content-hero-header, .content-hero-section),
-:is(.content-container[data-active-section="recorder"], .content-container[data-active-section="log"]) :is(.go-back-button, .content-footer-wrapper),
+.content-container[data-active-section="hero"]
+  :is(.content-hero-header, .content-hero-section),
+:is(
+    .content-container[data-active-section="recorder"],
+    .content-container[data-active-section="log"]
+  )
+  :is(.go-back-button, .content-footer-wrapper),
 .content-container[data-active-section="recorder"] .content-recorder-section,
 .content-container[data-active-section="log"] .content-log-section {
   display: flex;
 }
 
-.content-container:has(.content-recorder-section:not([data-action="record"], [data-action="finished"])) .settings-button {
+.content-container:has(
+    .content-recorder-section:not(
+        [data-action="record"],
+        [data-action="finished"]
+      )
+  )
+  .settings-button {
   display: flex;
 }
 
-.content-container:not([data-active-section="hero"]) :is(.content-header-wrapper, .content-footer-wrapper) {
+.content-container:not([data-active-section="hero"])
+  :is(.content-header-wrapper, .content-footer-wrapper) {
   background: black;
 }
 
@@ -192,7 +204,8 @@ body {
   color: rgb(24, 132, 255);
 }
 
-.content-recorder-section[data-ready="true"] .content-recorder-pre-stream-wrapper {
+.content-recorder-section[data-ready="true"]
+  .content-recorder-pre-stream-wrapper {
   display: none;
 }
 
@@ -214,7 +227,8 @@ body {
   background: inherit;
 }
 
-.content-recorder-section:is([data-action="preview"], [data-action="record"]) video {
+.content-recorder-section:is([data-action="preview"], [data-action="record"])
+  video {
   transform: scaleX(-1);
 }
 
@@ -242,7 +256,7 @@ body {
 
 .timer-top-wrapper,
 .top-flip-wrapper {
-  border-bottom: .1px solid rgba(0, 0, 0, 0.75);
+  border-bottom: 0.1px solid rgba(0, 0, 0, 0.75);
 }
 
 .timer-bottom-wrapper,
@@ -311,15 +325,17 @@ body {
 }
 
 .content-recorder-timer-wrapper {
-  position: absolute; 
+  position: absolute;
   bottom: 0;
   right: 0;
   padding: 10px;
   font-size: 25px;
 }
 
-.content-recorder-section[data-ready="true"][data-action="record"] .content-recorder-timer-wrapper,
-.content-recorder-section[data-ready="true"] :is(.content-recorder-controls-wrapper, .content-recorder-video-wrapper) {
+.content-recorder-section[data-ready="true"][data-action="record"]
+  .content-recorder-timer-wrapper,
+.content-recorder-section[data-ready="true"]
+  :is(.content-recorder-controls-wrapper, .content-recorder-video-wrapper) {
   display: flex;
 }
 
@@ -327,16 +343,18 @@ body {
   position: absolute;
   height: fit-content;
   inset-inline: 0;
-  bottom: calc(var(--wrapper-height)/-2);
+  bottom: calc(var(--wrapper-height) / -2);
   justify-content: center;
   padding-inline: 20px;
   flex-wrap: wrap;
   column-gap: 30px;
 }
 
-.content-recorder-section[data-action="preview"] :is(.capture-photo-button, .record-video-button),
+.content-recorder-section[data-action="preview"]
+  :is(.capture-photo-button, .record-video-button),
 .content-recorder-section[data-action="record"] .stop-recording-button,
-.content-recorder-section[data-action="finished"] :is(.reset-button, .save-button) {
+.content-recorder-section[data-action="finished"]
+  :is(.reset-button, .save-button) {
   display: flex;
 }
 
@@ -349,7 +367,7 @@ body {
 }
 
 .save-button {
-  background-color: rgb(110, 248, 110)
+  background-color: rgb(110, 248, 110);
 }
 
 .content-log-section {
@@ -438,7 +456,8 @@ body {
   font-size: 16px;
 }
 
-.settings-choice, .media-picker-button {
+.settings-choice,
+.media-picker-button {
   width: 100%;
   min-width: 130px;
   text-align: left;
