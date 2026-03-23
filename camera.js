@@ -169,7 +169,7 @@ async function handleMediaDeviceChange() {
 function updateSections() {
   DOM.container.dataset.activeSection = sections[sectionsIndex];
   stopCapturingStream();
-  DOM.video.poster = "";
+  DOM.video.removeAttribute("poster");
   DOM.video.muted = true;
   DOM.video.tmgcontrols = false;
   DOM.video = container.querySelector(".recorder-video");
@@ -378,7 +378,7 @@ async function stopRecording() {
       DOM.saveBtn.download = "Video.webm";
       DOM.saveBtn.href = DOM.video.src = videoURL;
       DOM.video.load();
-      DOM.video.poster = "";
+      DOM.video.removeAttribute("poster");
       DOM.video.tmgcontrols = true;
       DOM.video.muted = false;
       stopCapturingStream();
